@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Awadh Gully | Royal Awadhi Flavors, Modernly Served</title>
+    <meta name="description" content="Experience the royal culinary heritage of Awadh, reimagined for the modern palate. Premium kebabs, biryanis, and curries.">
+
+    <!-- Fonts: Playfair Display (Serif) & Poppins (Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons: FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Config for Brand Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        awadh: {
+                            maroon: '#5A0F1B',
+                            gold: '#C9A24D',
+                            ivory: '#FAF7F2',
+                            charcoal: '#1E1E1E',
+                            saffron: '#E07A2D',
+                        },
+                        swiggy: '#FC8019',
+                        zomato: '#CB202D',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to right, rgba(20, 5, 8, 0.85), rgba(90, 15, 27, 0.4), transparent), url('https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?q=80&w=2088&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for nuances hard to do with just utility classes */
+        
+        body {
+            background-color: #FAF7F2; /* Warm Ivory */
+            color: #1E1E1E; /* Charcoal */
+        }
+
+        .text-shadow-sm {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Drop Cap Logic */
+        .drop-cap::first-letter {
+            float: left;
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            line-height: 0.85;
+            padding-right: 0.75rem;
+            padding-top: 0.25rem;
+            color: #C9A24D; /* Antique Gold */
+            font-weight: 700;
+        }
+
+        /* Smooth reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5A0F1B;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3e0a12;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased overflow-x-hidden selection:bg-awadh-maroon selection:text-awadh-ivory">
+
+    <!-- Navigation (Sticky, Minimal) -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent">
+        <div class="flex items-center gap-2">
+            <!-- Logo Icon (Abstract Gateway/Arch) -->
+            <div class="text-awadh-ivory text-2xl">
+                <i class="fa-solid fa-archway"></i>
+            </div>
+            <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-awadh-ivory">AWADH GULLY</span>
+        </div>
+        
+        <div class="hidden md:flex gap-8 items-center">
+            <a href="#story" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Our Story</a>
+            <a href="#menu" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Menu</a>
+            <a href="#experience" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Experience</a>
+            <a href="#order" class="border border-awadh-gold text-awadh-gold px-5 py-2 text-sm hover:bg-awadh-gold hover:text-awadh-maroon transition-all duration-300">Order Now</a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-awadh-ivory text-2xl">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-awadh-maroon z-40 transform translate-x-full transition-transform duration-300 flex flex-col items-center justify-center gap-8">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-awadh-ivory text-3xl">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <a href="#story" class="mobile-link text-awadh-ivory text-2xl font-serif">Our Story</a>
+        <a href="#menu" class="mobile-link text-awadh-ivory text-2xl font-serif">Menu</a>
+        <a href="#experience" class="mobile-link text-awadh-ivory text-2xl font-serif">Experience</a>
+        <a href="#order" class="mobile-link text-awadh-gold text-2xl font-serif border-b border-awadh-gold pb-1">Order Now</a>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative w-full h-screen bg-hero-pattern bg-cover bg-center bg-no-repeat bg-fixed flex items-center">
+        <!-- Overlay for better text readability if image fails or is too bright -->
+        <div class="absolute inset-0 bg-black/20"></div>
+
+        <div class="relative z-10 container mx-auto px-6 md:px-12 pt-20">
+            <div class="max-w-3xl reveal active">
+                <p class="text-awadh-gold tracking-[0.2em] uppercase text-sm md:text-base mb-4 font-medium">Est. Lucknow • Served Modern</p>
+                <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-awadh-ivory font-bold leading-tight mb-6">
+                    Royal Awadhi Flavors, <br>
+                    <span class="italic font-light">Modernly Served.</span>
+                </h1>
+                <p class="text-gray-200 text-lg md:text-xl font-light max-w-lg mb-10 leading-relaxed">
+                    A culinary journey back to the royal kitchens of the Nawabs, reimagined for the pace of the modern urban gourmand.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-5">
+                    <a href="#order" class="group relative px-8 py-4 bg-awadh-maroon text-awadh-ivory overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(90,15,27,0.5)]">
+                        <span class="relative z-10 flex items-center gap-3 font-medium tracking-wide">
+                            Order Now <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                        </span>
+                        <!-- Hover effect overlay -->
+                        <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </a>
+                    
+                    <a href="#story" class="px-8 py-4 border border-awadh-ivory text-awadh-ivory hover:bg-awadh-ivory hover:text-awadh-maroon transition-all duration-300 font-medium tracking-wide text-center">
+                        View Our Story
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-awadh-ivory animate-bounce text-opacity-70">
+            <span class="text-xs tracking-widest uppercase mb-2 block text-center">Scroll</span>
+            <i class="fa-solid fa-chevron-down text-xl"></i>
+        </div>
+    </header>
+
+    <!-- Brand Story Section -->
+    <section id="story" class="py-24 md:py-32 bg-awadh-ivory relative">
+        <div class="container mx-auto px-6 md:px-12 max-w-5xl">
+            <!-- Decorative Header -->
+            <div class="text-center mb-16 reveal">
+                <span class="text-awadh-maroon text-xs font-bold tracking-[0.3em] uppercase">Heritage</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-awadh-charcoal mt-3 mb-6">The Awadh Gully Story</h2>
+                <div class="w-24 h-[1px] bg-awadh-gold mx-auto opacity-60"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+                <!-- Left Column: Sticky Title/Quote -->
+                <div class="md:col-span-4 md:sticky md:top-32 reveal">
+                    <h3 class="font-serif text-3xl text-awadh-maroon leading-tight italic">
+                        "Where the slow art of Dum Pukht meets the speed of the city."
+                    </h3>
+                    <div class="mt-8 hidden md:block w-12 h-1 bg-awadh-maroon"></div>
+                </div>
+
+                <!-- Right Column: Narrative -->
+                <div class="md:col-span-8 space-y-8 text-gray-700 leading-relaxed font-light text-lg reveal">
+                    <p class="drop-cap">
+                        In the narrow, aromatic lanes of old Lucknow, food was never just sustenance; it was an art form patronage by Nawabs. The <span class="text-awadh-maroon font-medium">Galoutis</span> were crafted to melt on the tongue, and the <span class="text-awadh-maroon font-medium">Biryanis</span> were slow-cooked overnight to capture the essence of saffron and charcoal. This was a world of patience, texture, and untold luxury.
+                    </p>
+                    
+                    <div class="w-full h-[1px] bg-awadh-gold/30 my-6"></div>
+
+                    <p>
+                        Awadh Gully was born from a desire to bridge centuries. We asked ourselves: can this royal heritage survive the hustle of the modern metropolis? The answer lies in our philosophy of <span class="italic text-awadh-charcoal">"Premium Convenience."</span> We stripped away the heaviness of traditional dining halls but kept the weight of the culinary tradition intact.
+                    </p>
+
+                    <p>
+                        Every spice blend is authentic. Every cut of meat is premium. But the experience is designed for you—whether you're ordering from our cloud kitchen for a dinner party or grabbing a box from our eco-friendly carts. This is the new heritage.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signature Dishes Showcase -->
+    <section id="menu" class="py-24 bg-[#F2EDE6]"> <!-- Slightly darker ivory for contrast -->
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <span class="text-awadh-gold text-xs font-bold tracking-[0.3em] uppercase">The Menu</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-awadh-charcoal mt-3">Signature Creations</h2>
+                </div>
+                <a href="#order" class="hidden md:inline-block text-awadh-maroon hover:text-awadh-gold transition-colors pb-1 border-b border-awadh-maroon/30 hover:border-awadh-gold text-sm tracking-widest uppercase mt-6 md:mt-0">
+                    View Full Menu
+                </a>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <div class="group cursor-pointer reveal transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-80 overflow-hidden w-full bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1606471191009-63994c53433b?q=80&w=1227&auto=format&fit=crop" 
+                             alt="Galouti Kebab" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-awadh-ivory font-serif text-2xl mb-1">Royal Galouti Kebab</h3>
+                            <p class="text-awadh-gold text-xs uppercase tracking-wider">Melt-in-mouth texture</p>
+                        </div>
+                    </div>
+                    <div class="bg-awadh-ivory p-6 border-b-4 border-transparent group-hover:border-awadh-maroon shadow-sm transition-all">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                            Finely minced lamb marinated with 160 secret spices, smoked with cloves, and pan-seared in ghee.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Signature</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group cursor-pointer reveal transition-all duration-500 hover:-translate-y-2 lg:mt-12"> <!-- Offset for visual rhythm -->
+                    <div class="relative h-80 overflow-hidden w-full bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1589302168068-964664d93dc0?q=80&w=1974&auto=format&fit=crop" 
+                             alt="Awadhi Biryani" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-awadh-ivory font-serif text-2xl mb-1">Nawabi Dum Biryani</h3>
+                            <p class="text-awadh-gold text-xs uppercase tracking-wider">Aromatic & Subtle</p>
+                        </div>
+                    </div>
+                    <div class="bg-awadh-ivory p-6 border-b-4 border-transparent group-hover:border-awadh-maroon shadow-sm transition-all">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                            Long-grain basmati and succulent meat, slow-cooked in a sealed 'handi' to trap the aroma of saffron and ittar.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Bestseller</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group cursor-pointer reveal transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-80 overflow-hidden w-full bg-gray-900">
+                        <img src="https://images.unsplash.com/photo-1574926054530-540288c8e678?q=80&w=1287&auto=format&fit=crop" 
+                             alt="Shahi Tukda" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
+                        <div class="absolute bottom-6 left-6">
+                            <h3 class="text-awadh-ivory font-serif text-2xl mb-1">Saffron Phirni</h3>
+                            <p class="text-awadh-gold text-xs uppercase tracking-wider">Sweet Conclusion</p>
+                        </div>
+                    </div>
+                    <div class="bg-awadh-ivory p-6 border-b-4 border-transparent group-hover:border-awadh-maroon shadow-sm transition-all">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                            Creamy ground rice pudding enriched with saffron, cardamom, and garnished with silver leaf and nuts.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Dessert</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-10 text-center md:hidden">
+                <a href="#order" class="text-awadh-maroon border-b border-awadh-maroon pb-1 text-sm tracking-widest uppercase">View Full Menu</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Experience / Tech Section -->
+    <section id="experience" class="py-24 bg-awadh-ivory">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-serif text-awadh-charcoal">The Modern Awadh Experience</h2>
+                <p class="mt-4 text-gray-500 max-w-2xl mx-auto">Blending heritage recipes with futuristic delivery models.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Col 1 -->
+                <div class="text-center p-6 group reveal">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">Cloud Kitchens</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Precision-controlled environments ensuring every Dum Biryani is cooked to the exact same royal standard, every time.
+                    </p>
+                </div>
+
+                <!-- Col 2 -->
+                <div class="text-center p-6 group reveal transition-all delay-100">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">EV Food Carts</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Bringing Lucknow to your doorstep sustainably. Our custom electric carts maintain ideal serving temperatures.
+                    </p>
+                </div>
+
+                <!-- Col 3 -->
+                <div class="text-center p-6 group reveal transition-all delay-200">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">Smart Delivery</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Integrated with top logistics to ensure the 'Dum' (steam) is broken only when you open the box.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ordering Section -->
+    <section id="order" class="py-24 bg-awadh-charcoal relative overflow-hidden">
+        <!-- Abstract Background Element -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-awadh-maroon rounded-full blur-[100px] opacity-20"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-awadh-gold rounded-full blur-[100px] opacity-10"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
+            <h2 class="text-4xl md:text-5xl font-serif text-awadh-ivory mb-6 reveal">Indulge Now</h2>
+            <p class="text-gray-400 mb-12 max-w-xl mx-auto font-light reveal">
+                Your royal feast is just a click away. Available across major delivery platforms in your city.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center gap-6 reveal">
+                <!-- Swiggy Button -->
+                <a href="#" class="group bg-[#FC8019] hover:bg-[#e06d0e] text-white px-8 py-4 rounded-sm flex items-center justify-center gap-4 transition-all duration-300 w-full md:w-auto min-w-[240px]">
+                    <span class="text-2xl"><i class="fa-solid fa-utensils"></i></span> <!-- Using generic icon for demo, normally SVG logo -->
+                    <div class="text-left">
+                        <p class="text-[10px] uppercase tracking-widest opacity-90">Order on</p>
+                        <p class="font-bold text-xl leading-none">Swiggy</p>
+                    </div>
+                </a>
+
+                <!-- Zomato Button -->
+                <a href="#" class="group bg-[#CB202D] hover:bg-[#b01b27] text-white px-8 py-4 rounded-sm flex items-center justify-center gap-4 transition-all duration-300 w-full md:w-auto min-w-[240px]">
+                    <span class="text-2xl italic font-serif font-black">Z</span>
+                    <div class="text-left">
+                        <p class="text-[10px] uppercase tracking-widest opacity-90">Order on</p>
+                        <p class="font-bold text-xl leading-none">Zomato</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-awadh-maroon text-awadh-ivory pt-20 pb-10 border-t border-awadh-gold/20">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="text-awadh-gold text-xl">
+                            <i class="fa-solid fa-archway"></i>
+                        </div>
+                        <span class="font-serif text-xl font-bold tracking-wide">AWADH GULLY</span>
+                    </div>
+                    <p class="text-awadh-ivory/60 text-sm leading-relaxed">
+                        Royal Awadhi flavors, curated for the modern connoisseur. Bringing the legacy of Lucknow to your table.
+                    </p>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="text-awadh-gold text-sm font-bold uppercase tracking-widest mb-6">Explore</h4>
+                    <ul class="space-y-4 text-sm text-awadh-ivory/80">
+                        <li><a href="#story" class="hover:text-awadh-gold transition-colors">Our Story</a></li>
+                        <li><a href="#menu" class="hover:text-awadh-gold transition-colors">Signature Menu</a></li>
+                        <li><a href="#experience" class="hover:text-awadh-gold transition-colors">Locations</a></li>
+                        <li><a href="#" class="hover:text-awadh-gold transition-colors">Franchise Inquiry</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-awadh-gold text-sm font-bold uppercase tracking-widest mb-6">Contact</h4>
+                    <ul class="space-y-4 text-sm text-awadh-ivory/80">
+                        <li><i class="fa-regular fa-envelope mr-2"></i> hello@awadhgully.com</li>
+                        <li><i class="fa-solid fa-phone mr-2"></i> +91 98765 43210</li>
+                        <li><i class="fa-solid fa-location-dot mr-2"></i> Greater Kailash I, New Delhi</li>
+                    </ul>
+                </div>
+
+                <!-- Social -->
+                <div>
+                    <h4 class="text-awadh-gold text-sm font-bold uppercase tracking-widest mb-6">Follow Us</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-awadh-ivory/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-awadh-ivory/40">
+                <p>&copy; 2024 Awadh Gully Foods Pvt. Ltd. All rights reserved.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-awadh-ivory transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-awadh-ivory transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar Scrolled State
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-awadh-maroon/95', 'shadow-lg', 'backdrop-blur-sm', 'py-2');
+                navbar.classList.remove('bg-transparent', 'py-4');
+            } else {
+                navbar.classList.remove('bg-awadh-maroon/95', 'shadow-lg', 'backdrop-blur-sm', 'py-2');
+                navbar.classList.add('bg-transparent', 'py-4');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Scroll Reveal Animation using Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
