@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <!-- Gold gradient for 3D effect -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8C547;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#C9A24D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A67C3D;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFF8E1;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#C9A24D;stop-opacity:0.3" />
+    </linearGradient>
+    <!-- Shadow for depth -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle (optional, can be transparent) -->
+  <circle cx="200" cy="200" r="195" fill="#5A0F1B" opacity="0.1"/>
+  
+  <!-- Archway/Dome structure above AG -->
+  <path d="M 120 120 Q 200 80 280 120 L 280 140 Q 200 100 120 140 Z" 
+        fill="url(#goldGradient)" 
+        stroke="#A67C3D" 
+        stroke-width="2"
+        filter="url(#shadow)"/>
+  
+  <!-- Decorative arch details -->
+  <path d="M 140 125 Q 200 90 260 125" 
+        fill="none" 
+        stroke="url(#goldHighlight)" 
+        stroke-width="1.5" 
+        opacity="0.6"/>
+  
+  <!-- Letter A (forming left side of auto-rickshaw) -->
+  <path d="M 150 180 L 150 280 L 200 320 L 250 280 L 250 180 L 200 140 Z" 
+        fill="url(#goldGradient)" 
+        stroke="#A67C3D" 
+        stroke-width="3"
+        filter="url(#shadow)"/>
+  
+  <!-- A crossbar -->
+  <line x1="170" y1="220" x2="230" y2="220" 
+        stroke="#A67C3D" 
+        stroke-width="4" 
+        stroke-linecap="round"/>
+  
+  <!-- Letter G integrated into A (right side, forming auto-rickshaw body) -->
+  <path d="M 200 240 Q 240 240 250 260 Q 250 280 230 280 L 200 280" 
+        fill="none" 
+        stroke="url(#goldGradient)" 
+        stroke-width="4" 
+        stroke-linecap="round"
+        opacity="0.8"/>
+  
+  <!-- Lightning bolt inside A (electric vehicle symbol) -->
+  <path d="M 185 200 L 195 220 L 190 220 L 200 240 L 195 235 L 205 235 L 195 215 L 200 215 Z" 
+        fill="#FFF8E1" 
+        opacity="0.9"
+        filter="url(#shadow)"/>
+  
+  <!-- Auto-rickshaw wheels (two circles below AG) -->
+  <circle cx="180" cy="300" r="12" 
+          fill="url(#goldGradient)" 
+          stroke="#A67C3D" 
+          stroke-width="2"
+          filter="url(#shadow)"/>
+  <circle cx="220" cy="300" r="12" 
+          fill="url(#goldGradient)" 
+          stroke="#A67C3D" 
+          stroke-width="2"
+          filter="url(#shadow)"/>
+  
+  <!-- Wheel details -->
+  <circle cx="180" cy="300" r="6" fill="#A67C3D" opacity="0.5"/>
+  <circle cx="220" cy="300" r="6" fill="#A67C3D" opacity="0.5"/>
+  
+  <!-- Additional 3D emboss effect highlights -->
+  <path d="M 150 180 L 200 140 L 200 160" 
+        fill="url(#goldHighlight)" 
+        opacity="0.4"/>
+</svg>
+
