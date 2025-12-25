@@ -33,11 +33,13 @@
                 extend: {
                     colors: {
                         awadh: {
-                            maroon: '#5A0F1B',
-                            gold: '#C9A24D',
-                            ivory: '#FAF7F2',
-                            charcoal: '#1E1E1E',
-                            saffron: '#E07A2D',
+                            maroon: '#7A1E1E',        // Deep Awadh Maroon - Backgrounds, headers, hero sections
+                            gold: '#D4AF37',           // Royal Nawabi Gold - Logo, highlights, icons, premium accents
+                            'gold-shadow': '#B8962E',  // Antique Gold Shadow - Shadows, gradients, embossed effects
+                            'dark-crimson': '#5C1414', // Dark Crimson - Dark sections, footers, overlays
+                            charcoal: '#1C1C1C',      // Near Black - Text, outlines, UI contrast
+                            'highlight-gold': '#F1D27A', // Soft Highlight Gold - Hover states, glow effects
+                            ivory: '#FAF7F2',          // Warm Ivory (kept for backgrounds)
                         },
                         swiggy: '#FC8019',
                         zomato: '#CB202D',
@@ -47,7 +49,7 @@
                         sans: ['"Poppins"', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'hero-pattern': "linear-gradient(to right, rgba(20, 5, 8, 0.85), rgba(90, 15, 27, 0.4), transparent), url('https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?q=80&w=2088&auto=format&fit=crop')",
+                        'hero-pattern': "linear-gradient(to right, rgba(92, 20, 20, 0.85), rgba(122, 30, 30, 0.4), transparent), url('https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?q=80&w=2088&auto=format&fit=crop')",
                     }
                 }
             }
@@ -59,7 +61,7 @@
         
         body {
             background-color: #FAF7F2; /* Warm Ivory */
-            color: #1E1E1E; /* Charcoal */
+            color: #1C1C1C; /* Near Black */
         }
 
         .text-shadow-sm {
@@ -74,7 +76,7 @@
             line-height: 0.85;
             padding-right: 0.75rem;
             padding-top: 0.25rem;
-            color: #C9A24D; /* Antique Gold */
+            color: #D4AF37; /* Royal Nawabi Gold */
             font-weight: 700;
         }
 
@@ -97,10 +99,10 @@
             background: #FAF7F2;
         }
         ::-webkit-scrollbar-thumb {
-            background: #5A0F1B;
+            background: #7A1E1E; /* Deep Awadh Maroon */
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #3e0a12;
+            background: #5C1414; /* Dark Crimson */
         }
     </style>
 </head>
@@ -120,10 +122,10 @@
         </div>
         
         <div class="hidden md:flex gap-8 items-center">
-            <a href="#story" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Our Story</a>
-            <a href="#menu" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Menu</a>
-            <a href="#experience" class="text-awadh-ivory/90 hover:text-awadh-gold text-sm tracking-widest uppercase transition-colors">Experience</a>
-            <a href="#order" class="border border-awadh-gold text-awadh-gold px-5 py-2 text-sm hover:bg-awadh-gold hover:text-awadh-maroon transition-all duration-300">Order Now</a>
+            <a href="#story" class="text-awadh-ivory/90 hover:text-awadh-highlight-gold text-sm tracking-widest uppercase transition-colors">Our Story</a>
+            <a href="#menu" class="text-awadh-ivory/90 hover:text-awadh-highlight-gold text-sm tracking-widest uppercase transition-colors">Menu</a>
+            <a href="#experience" class="text-awadh-ivory/90 hover:text-awadh-highlight-gold text-sm tracking-widest uppercase transition-colors">Experience</a>
+            <a href="#order" class="border border-awadh-gold text-awadh-gold px-5 py-2 text-sm hover:bg-awadh-highlight-gold hover:text-awadh-maroon transition-all duration-300">Order Now</a>
         </div>
 
         <!-- Mobile Menu Button -->
@@ -140,7 +142,7 @@
         <a href="#story" class="mobile-link text-awadh-ivory text-2xl font-serif">Our Story</a>
         <a href="#menu" class="mobile-link text-awadh-ivory text-2xl font-serif">Menu</a>
         <a href="#experience" class="mobile-link text-awadh-ivory text-2xl font-serif">Experience</a>
-        <a href="#order" class="mobile-link text-awadh-gold text-2xl font-serif border-b border-awadh-gold pb-1">Order Now</a>
+        <a href="#order" class="mobile-link text-awadh-highlight-gold text-2xl font-serif border-b border-awadh-gold pb-1">Order Now</a>
     </div>
 
     <!-- Hero Section -->
@@ -160,7 +162,7 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-5">
-                    <a href="#order" class="group relative px-8 py-4 bg-awadh-maroon text-awadh-ivory overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(90,15,27,0.5)]">
+                    <a href="#order" class="group relative px-8 py-4 bg-awadh-maroon text-awadh-ivory overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(122,30,30,0.5)]">
                         <span class="relative z-10 flex items-center gap-3 font-medium tracking-wide">
                             Order Now <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
                         </span>
@@ -223,14 +225,14 @@
     </section>
 
     <!-- Signature Dishes Showcase -->
-    <section id="menu" class="py-24 bg-[#F2EDE6]"> <!-- Slightly darker ivory for contrast -->
+    <section id="menu" class="py-24 bg-awadh-ivory/95"> <!-- Slightly darker ivory for contrast -->
         <div class="container mx-auto px-6 md:px-12">
             <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
                 <div>
                     <span class="text-awadh-gold text-xs font-bold tracking-[0.3em] uppercase">The Menu</span>
                     <h2 class="text-4xl md:text-5xl font-serif text-awadh-charcoal mt-3">Signature Creations</h2>
                 </div>
-                <a href="#order" class="hidden md:inline-block text-awadh-maroon hover:text-awadh-gold transition-colors pb-1 border-b border-awadh-maroon/30 hover:border-awadh-gold text-sm tracking-widest uppercase mt-6 md:mt-0">
+                <a href="#order" class="hidden md:inline-block text-awadh-maroon hover:text-awadh-highlight-gold transition-colors pb-1 border-b border-awadh-maroon/30 hover:border-awadh-gold text-sm tracking-widest uppercase mt-6 md:mt-0">
                     View Full Menu
                 </a>
             </div>
@@ -255,7 +257,7 @@
                             Finely minced lamb marinated with 160 secret spices, smoked with cloves, and pan-seared in ghee.
                         </p>
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="w-2 h-2 rounded-full bg-awadh-gold"></span>
                             <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Signature</span>
                         </div>
                     </div>
@@ -278,7 +280,7 @@
                             Long-grain basmati and succulent meat, slow-cooked in a sealed 'handi' to trap the aroma of saffron and ittar.
                         </p>
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="w-2 h-2 rounded-full bg-awadh-gold"></span>
                             <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Bestseller</span>
                         </div>
                     </div>
@@ -301,7 +303,7 @@
                             Creamy ground rice pudding enriched with saffron, cardamom, and garnished with silver leaf and nuts.
                         </p>
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-awadh-saffron"></span>
+                            <span class="w-2 h-2 rounded-full bg-awadh-gold"></span>
                             <span class="text-xs text-awadh-maroon font-medium uppercase tracking-wide">Dessert</span>
                         </div>
                     </div>
@@ -310,7 +312,7 @@
             </div>
             
             <div class="mt-10 text-center md:hidden">
-                <a href="#order" class="text-awadh-maroon border-b border-awadh-maroon pb-1 text-sm tracking-widest uppercase">View Full Menu</a>
+                <a href="#order" class="text-awadh-maroon hover:text-awadh-highlight-gold border-b border-awadh-maroon hover:border-awadh-gold pb-1 text-sm tracking-widest uppercase transition-colors">View Full Menu</a>
             </div>
         </div>
     </section>
@@ -326,7 +328,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <!-- Col 1 -->
                 <div class="text-center p-6 group reveal">
-                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-highlight-gold">
                         <i class="fa-solid fa-cloud"></i>
                     </div>
                     <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">Cloud Kitchens</h3>
@@ -337,7 +339,7 @@
 
                 <!-- Col 2 -->
                 <div class="text-center p-6 group reveal transition-all delay-100">
-                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-highlight-gold">
                         <i class="fa-solid fa-bolt"></i>
                     </div>
                     <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">EV Food Carts</h3>
@@ -348,7 +350,7 @@
 
                 <!-- Col 3 -->
                 <div class="text-center p-6 group reveal transition-all delay-200">
-                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-ivory">
+                    <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-awadh-maroon/5 flex items-center justify-center text-awadh-maroon text-2xl transition-colors group-hover:bg-awadh-maroon group-hover:text-awadh-highlight-gold">
                         <i class="fa-solid fa-stopwatch"></i>
                     </div>
                     <h3 class="font-serif text-xl mb-3 text-awadh-charcoal">Smart Delivery</h3>
@@ -361,10 +363,10 @@
     </section>
 
     <!-- Ordering Section -->
-    <section id="order" class="py-24 bg-awadh-charcoal relative overflow-hidden">
+    <section id="order" class="py-24 bg-awadh-dark-crimson relative overflow-hidden">
         <!-- Abstract Background Element -->
         <div class="absolute top-0 right-0 w-64 h-64 bg-awadh-maroon rounded-full blur-[100px] opacity-20"></div>
-        <div class="absolute bottom-0 left-0 w-64 h-64 bg-awadh-gold rounded-full blur-[100px] opacity-10"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-awadh-highlight-gold rounded-full blur-[100px] opacity-20"></div>
 
         <div class="container mx-auto px-6 md:px-12 relative z-10 text-center">
             <h2 class="text-4xl md:text-5xl font-serif text-awadh-ivory mb-6 reveal">Indulge Now</h2>
@@ -427,10 +429,10 @@
                 <div>
                     <h4 class="text-awadh-gold text-sm font-bold uppercase tracking-widest mb-6">Explore</h4>
                     <ul class="space-y-4 text-sm text-awadh-ivory/80">
-                        <li><a href="#story" class="hover:text-awadh-gold transition-colors">Our Story</a></li>
-                        <li><a href="#menu" class="hover:text-awadh-gold transition-colors">Signature Menu</a></li>
-                        <li><a href="#experience" class="hover:text-awadh-gold transition-colors">Locations</a></li>
-                        <li><a href="#" class="hover:text-awadh-gold transition-colors">Franchise Inquiry</a></li>
+                        <li><a href="#story" class="hover:text-awadh-highlight-gold transition-colors">Our Story</a></li>
+                        <li><a href="#menu" class="hover:text-awadh-highlight-gold transition-colors">Signature Menu</a></li>
+                        <li><a href="#experience" class="hover:text-awadh-highlight-gold transition-colors">Locations</a></li>
+                        <li><a href="#" class="hover:text-awadh-highlight-gold transition-colors">Franchise Inquiry</a></li>
                     </ul>
                 </div>
 
@@ -448,13 +450,13 @@
                 <div>
                     <h4 class="text-awadh-gold text-sm font-bold uppercase tracking-widest mb-6">Follow Us</h4>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-highlight-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-highlight-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
+                        <a href="#" class="w-10 h-10 border border-awadh-ivory/30 rounded-full flex items-center justify-center hover:bg-awadh-highlight-gold hover:border-awadh-gold hover:text-awadh-maroon transition-all">
                             <i class="fa-brands fa-twitter"></i>
                         </a>
                     </div>
