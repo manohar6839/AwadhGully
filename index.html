@@ -6,6 +6,15 @@
     <title>Awadh Gully | Royal Awadhi Flavors, Modernly Served</title>
     <meta name="description" content="Experience the royal culinary heritage of Awadh, reimagined for the modern palate. Premium kebabs, biryanis, and curries.">
 
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icons/android-chrome-512x512.png">
+    <link rel="manifest" href="/assets/icons/site.webmanifest">
+
     <!-- Fonts: Playfair Display (Serif) & Poppins (Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,12 +108,18 @@
 
     <!-- Navigation (Sticky, Minimal) -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent">
-        <div class="flex items-center gap-2">
-            <!-- Logo Icon (Abstract Gateway/Arch) -->
-            <div class="text-awadh-ivory text-2xl">
-                <i class="fa-solid fa-archway"></i>
-            </div>
-            <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-awadh-ivory">AWADH GULLY</span>
+        <div class="flex items-center gap-3">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-3">
+                <img src="/assets/images/logo.png" 
+                     alt="Awadh Gully Logo" 
+                     class="h-8 md:h-10 w-auto object-contain"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="text-awadh-ivory text-2xl hidden">
+                    <i class="fa-solid fa-archway"></i>
+                </div>
+            </a>
+            <span class="font-serif text-xl md:text-2xl font-bold tracking-wide text-awadh-ivory hidden md:inline">AWADH GULLY</span>
         </div>
         
         <div class="hidden md:flex gap-8 items-center">
@@ -399,11 +414,15 @@
                 
                 <!-- Brand -->
                 <div class="md:col-span-1">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="text-awadh-gold text-xl">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="/assets/images/logo.png" 
+                             alt="Awadh Gully Logo" 
+                             class="h-10 w-auto object-contain"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="text-awadh-gold text-xl hidden">
                             <i class="fa-solid fa-archway"></i>
                         </div>
-                        <span class="font-serif text-xl font-bold tracking-wide">AWADH GULLY</span>
+                        <span class="font-serif text-xl font-bold tracking-wide hidden md:inline">AWADH GULLY</span>
                     </div>
                     <p class="text-awadh-ivory/60 text-sm leading-relaxed">
                         Royal Awadhi flavors, curated for the modern connoisseur. Bringing the legacy of Lucknow to your table.
