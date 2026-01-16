@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Background -->
+  <rect width="400" height="500" fill="#8B3A3A"/>
+
+  <!-- Define gradient for golden effect -->
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFC700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4A017;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Main 'A' structure with golden gradient -->
+  <g filter="url(#shadow)">
+    <!-- Left diagonal of A -->
+    <path d="M 80 380 L 200 80 L 210 80 L 90 380 Z" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+
+    <!-- Right diagonal of A -->
+    <path d="M 310 380 L 190 80 L 200 80 L 320 380 Z" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+
+    <!-- Curved top of A -->
+    <path d="M 80 380 Q 200 40 320 380" fill="none" stroke="url(#goldGradient)" stroke-width="28" stroke-linecap="round"/>
+
+    <!-- Horizontal bar of A -->
+    <rect x="90" y="250" width="220" height="18" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2" rx="4"/>
+  </g>
+
+  <!-- Lightning bolt inside A -->
+  <g>
+    <path d="M 200 150 L 185 220 L 205 220 L 185 310 L 215 260 L 195 260 L 215 150 Z" fill="#FFD700" stroke="#B8860B" stroke-width="1.5"/>
+  </g>
+
+  <!-- Left wheel -->
+  <circle cx="130" cy="410" r="22" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="130" cy="410" r="15" fill="none" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="130" cy="410" r="4" fill="#B8860B"/>
+
+  <!-- Right wheel -->
+  <circle cx="270" cy="410" r="22" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="270" cy="410" r="15" fill="none" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="270" cy="410" r="4" fill="#B8860B"/>
+
+  <!-- Connecting axle -->
+  <rect x="130" y="406" width="140" height="8" fill="#B8860B" rx="4"/>
+</svg>
