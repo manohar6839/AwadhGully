@@ -143,11 +143,11 @@ export const devConfig: VendureConfig = {
         //     //     devMode: true,
         //     // }),
         // }),
-        // AdminUiPlugin.init({
-        //     route: 'admin',
-        //     port: 5001,
-        //     adminUiConfig: {},
-        // }),
+        AdminUiPlugin.init({
+            route: 'admin',
+            port: 5001,
+            adminUiConfig: {},
+        }),
         // DashboardPlugin.init({
         //     route: 'dashboard',
         //     appDir: path.join(__dirname, './dist'),

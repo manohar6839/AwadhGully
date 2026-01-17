@@ -68,7 +68,80 @@ To ensure a high-quality, maintainable codebase, follow these guidelines:
 
 _Last updated: 2026-01-17_
 
-## Technical Learnings & Fixes (Jan 17 2026)
+## 🧠 Recent Technical Learnings & Fixes
+
+### Payment Method Configuration (Jan 17, 2026)
+
+**Issue:** The "Submit Payment" button on the checkout page was non-functional, preventing order completion.
+
+**Root Cause:** The Vendure backend had no payment methods configured in the database, causing the frontend to fail silently when attempting to process payments.
+
+**Solution:**
+
+1. Created a one-time script (`vendure/packages/dev-server/add-payment-method.ts`) to add a "Standard Payment" method to the existing database.
+2. Updated the database population script (`populate-awadh.ts`) to include payment method creation for fresh database setups.
+3. Enhanced the frontend payment component (`storefront/src/components/pages/checkout/components/OrderPayment.tsx`) to display warnings when no payment methods are available.
+
+**Key Files Modified:**
+
+- `vendure/packages/dev-server/add-payment-method.ts` (new)
+- `vendure/packages/dev-server/populate-awadh.ts`
+- `storefront/src/components/pages/checkout/components/OrderPayment.tsx`
+
+**Lesson Learned:** Always verify that essential backend configurations (payment methods, shipping methods, tax rates) are properly initialized during database population. Frontend error handling should provide clear feedback when backend data is missing.
+
+### Checkout Form Default Values (Jan 16, 2026)
+
+**Issue:** The checkout form's country dropdown wasn't properly defaulting to India, and users had to manually select country, province, and city.
+
+**Root Cause:** The form initialization logic wasn't properly setting default values for the Indian market configuration.
+
+**Solution:**
+
+1. Updated `OrderForm/index.tsx` to set default values for country (India), province (Uttar Pradesh), and city (Lucknow).
+2. Ensured the country dropdown properly reflects the selected value on initial render.
+3. Configured the form to match the backend's India-first configuration.
+
+**Key Files Modified:**
+
+- `storefront/src/components/pages/checkout/components/OrderForm/index.tsx`
+
+**Lesson Learned:** When configuring a storefront for a specific market, ensure all form defaults align with the target geography to provide a seamless user experience.
+
+### Currency Display & Formatting (Jan 16, 2026)
+
+**Issue:** Currency values were displaying as "INR100" instead of "₹100" throughout the cart and checkout pages.
+
+**Root Cause:** The currency formatting utility wasn't properly handling the INR currency code and symbol.
+
+**Solution:**
+
+1. Updated the `formatPrice` utility to use the native Intl.NumberFormat API with proper INR locale settings.
+2. Ensured consistent currency display across all components (cart, checkout, product pages).
+
+**Key Files Modified:**
+
+- Currency formatting utilities (exact path varies based on implementation)
+
+**Lesson Learned:** Use browser-native internationalization APIs (Intl.NumberFormat) for currency formatting rather than custom string manipulation to ensure proper locale-specific display.
+
+### Database Reset & Product Images (Jan 16, 2026)
+
+**Issue:** Products in the admin panel were showing issues, and product images needed to be enhanced with multiple high-quality images per product.
+
+**Solution:**
+
+1. Reset the database by deleting `vendure.sqlite` and repopulating with fresh data.
+2. Enhanced the `populate-awadh.ts` script to include multiple product images per item.
+3. Ensured all products have proper inventory levels and variant configurations.
+
+**Key Files Modified:**
+
+- `vendure/packages/dev-server/populate-awadh.ts`
+
+**Lesson Learned:** When making structural changes to the database schema or population logic, a clean reset ensures data integrity. Always include multiple product images for a professional e-commerce appearance.
+
+## Technical Learnings & Fixes (Jan 17 2026 - Earlier)
 
 ### The "Dependency Hell" Resolution (CJS vs ESM)
 
