@@ -425,6 +425,207 @@ const handlePayment = async () => {
 
 **Requirement**: Add 3-5 high-quality images per product for professional appearance
 
+#### 4.5 User Menu Dropdown Implementation
+
+**Issue**: User icon in navigation bar only functioned as a direct link without showing a dropdown menu with profile options
+
+**Solution**: Implement a functional dropdown menu with state-aware options
+
+**Component Structure** (`storefront/src/components/molecules/UserMenu.tsx`):
+
+```typescript
+import { Dropdown, HoverMenu } from '@/src/styles/reusableStyles';
+import { User2, UserCheck2, UserCircle, Package, MapPin, LogOut, LogIn, UserPlus } from 'lucide-react';
+
+export const UserMenu: React.FC<{ isLogged: boolean }> = ({ isLogged }) => {
+    const router = useRouter();
+    const ctx = useChannels();
+
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        try {
+            await storefrontApiMutation(ctx)({
+                logout: { success: true },
+            });
+            router.push('/');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
+    return (
+        <Dropdown>
+            <IconButton aria-label="User menu">
+                {isLogged ? <UserCheck2 size="2.4rem" /> : <User2 size="2.4rem" />}
+            </IconButton>
+
+            <HoverMenu customerMenu>
+                {isLogged ? (
+                    <>
+                        <MenuLink href="/customer/manage">
+                            <MenuItem>
+                                <UserCircle size="2rem" />
+                                <MenuText>My Account</MenuText>
+                            </MenuItem>
+                        </MenuLink>
+                        <MenuLink href="/customer/manage/orders">
+                            <MenuItem>
+                                <Package size="2rem" />
+                                <MenuText>My Orders</MenuText>
+                            </MenuItem>
+                        </MenuLink>
+                        <MenuLink href="/customer/manage/addresses">
+                            <MenuItem>
+                                <MapPin size="2rem" />
+                                <MenuText>Manage Addresses</MenuText>
+                            </MenuItem>
+                        </MenuLink>
+                        <MenuDivider />
+                        <MenuButton onClick={handleLogout}>
+                            <MenuItem>
+                                <LogOut size="2rem" />
+                                <MenuText>Logout</MenuText>
+                            </MenuItem>
+                        </MenuButton>
+                    </>
+                ) : (
+                    <>
+                        <MenuLink href="/customer/sign-in">
+                            <MenuItem>
+                                <LogIn size="2rem" />
+                                <MenuText>Sign in</MenuText>
+                            </MenuItem>
+                        </MenuLink>
+                        <MenuLink href="/customer/sign-up">
+                            <MenuItem>
+                                <UserPlus size="2rem" />
+                                <MenuText>Sign up</MenuText>
+                            </MenuItem>
+                        </MenuLink>
+                    </>
+                )}
+            </HoverMenu>
+        </Dropdown>
+    );
+};
+```
+
+**HoverMenu Styling** (`storefront/src/styles/reusableStyles.tsx`):
+
+```typescript
+export const HoverMenu = styled.div<{ customerMenu?: boolean }>`
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  z-index: 3;
+  background-color: ${(p) => p.theme.gray(0)};
+  color: ${(p) => p.theme.text.main};
+  transition: all 0.3s ease-in-out;
+  width: max-content;
+  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
+  border: 1px solid ${(p) => p.theme.gray(100)};
+
+  ${({ customerMenu }) =>
+    customerMenu &&
+    `
+        padding: 8px;
+        right: 0;
+        top: 100%;
+        transform: translateY(8px);
+    `}
+`;
+
+export const Dropdown = styled.div`
+  position: relative;
+
+  &:hover {
+    div {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+`;
+```
+
+**Features Implemented**:
+
+1. **State-Aware Menu Items**:
+   - Logged Out: "Sign in" and "Sign up"
+   - Logged In: "My Account", "My Orders", "Manage Addresses", "Logout"
+
+2. **Visual Feedback**:
+   - Icon changes from User2 to UserCheck2 when logged in
+   - Hover effects on menu items
+   - Smooth transitions and animations
+
+3. **Functional Logout**:
+   - Calls Vendure GraphQL API to end session
+   - Redirects to home page after logout
+   - Proper error handling
+
+4. **Professional Styling**:
+   - White background with subtle shadow
+   - Proper spacing and padding
+   - Lucide React icons for clarity
+   - Divider between options and logout
+
+#### 4.6 Test Account Creation
+
+**Purpose**: Create a verified test account for comprehensive feature testing without email verification
+
+**Implementation Steps**:
+
+1. **Access Vendure Admin Panel**:
+   - Navigate to http://localhost:3000/admin
+   - Log in with superadmin credentials
+   - Go to Customers section
+
+2. **Create Test Customer**:
+   - Click "Create new customer"
+   - Fill in details:
+     - First Name: Test
+     - Last Name: User
+     - Email: test@awadhgully.com
+     - Password: TestUser123!
+   - Set status to "Verified" (important!)
+   - Save customer
+
+**Test Account Credentials**:
+
+```
+Email: test@awadhgully.com
+Password: TestUser123!
+Status: Verified ✓
+```
+
+**Testing Capabilities**:
+
+This account enables testing of:
+
+- ✅ Sign In/Sign Out functionality
+- ✅ User menu dropdown (all logged-in options)
+- ✅ Account Management (view/edit profile)
+- ✅ Address Management (add/edit/delete addresses)
+- ✅ Order Management (view order history)
+- ✅ Password Change functionality
+- ✅ Shopping Cart operations
+- ✅ Complete checkout flows
+
+**Verification Checklist**:
+
+- [ ] Can log in via storefront sign-in page
+- [ ] User menu shows checkmark icon when logged in
+- [ ] Dropdown menu displays all logged-in options
+- [ ] "My Account" page shows correct user details
+- [ ] Logout functionality works and returns to logged-out state
+- [ ] Can add items to cart while logged in
+- [ ] Can complete checkout with saved addresses
+
+**Best Practice**: Always create verified test accounts in development to bypass email verification and speed up testing workflows.
+
 ---
 
 ### Phase 5: Documentation
@@ -618,6 +819,20 @@ npm run dev -- -p 3001
 - [ ] Payment submission works
 - [ ] Order confirmation shows
 - [ ] Error handling works (if payment fails)
+
+#### User Authentication & Navigation
+
+- [ ] User menu icon displays in navigation bar
+- [ ] Logged-out state shows User2 icon
+- [ ] Hovering over user icon shows dropdown menu
+- [ ] Logged-out dropdown shows "Sign in" and "Sign up" options
+- [ ] Can sign in with test account (test@awadhgully.com)
+- [ ] After login, user icon changes to UserCheck2 (with checkmark)
+- [ ] Logged-in dropdown shows "My Account", "My Orders", "Manage Addresses", "Logout"
+- [ ] Clicking "My Account" navigates to account management page
+- [ ] Account page displays correct user information
+- [ ] Logout button ends session and redirects to home
+- [ ] After logout, user menu returns to logged-out state
 
 #### Admin Panel
 
