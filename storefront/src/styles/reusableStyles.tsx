@@ -6,13 +6,15 @@ export const HoverMenu = styled.div<{ customerMenu?: boolean; langSwitcher?: boo
     visibility: hidden;
     position: absolute;
     z-index: 3;
-    background-color: gray;
-    color: white;
-    transition: all 0.4s ease-in-out;
+    background-color: ${p => p.theme.gray(0)};
+    color: ${p => p.theme.text.main};
+    transition: all 0.3s ease-in-out;
     width: max-content;
+    min-width: 200px;
     transform: translate(-4rem, 15px);
-    border-radius: 6px;
-    box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
+    border: 1px solid ${p => p.theme.gray(100)};
 
     a:last-of-type {
         div {
@@ -28,9 +30,10 @@ export const HoverMenu = styled.div<{ customerMenu?: boolean; langSwitcher?: boo
     ${({ customerMenu }) =>
         customerMenu &&
         `
-        padding: 16px;
+        padding: 8px;
         right: 0;
-        transform: none;
+        top: 100%;
+        transform: translateY(8px);
     `}
 
     ${({ langSwitcher }) =>

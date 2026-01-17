@@ -90,6 +90,92 @@ _Last updated: 2026-01-17_
 
 **Lesson Learned:** Always verify that essential backend configurations (payment methods, shipping methods, tax rates) are properly initialized during database population. Frontend error handling should provide clear feedback when backend data is missing.
 
+### User Menu Dropdown Implementation (Jan 17, 2026)
+
+**Issue:** The user icon in the navigation bar was not showing a user profile dropdown menu when clicked. It only functioned as a direct link to either the sign-in page (when logged out) or the account management page (when logged in).
+
+**Root Cause:** The `UserMenu` component was wrapped in a `Dropdown` container but lacked the actual dropdown menu content. It only contained a simple link without implementing the hover menu functionality that the `Dropdown` component was designed to support.
+
+**Solution:**
+
+1. **Enhanced UserMenu Component** (`storefront/src/components/molecules/UserMenu.tsx`):
+   - Added `HoverMenu` component with dynamic menu items based on authentication state
+   - Implemented state-aware menu options:
+     - **Logged Out:** "Sign in" and "Sign up" options
+     - **Logged In:** "My Account", "My Orders", "Manage Addresses", and "Logout" options
+   - Added Lucide React icons for visual clarity (UserCircle, Package, MapPin, LogOut, LogIn, UserPlus)
+   - Implemented functional logout handler using Vendure's GraphQL API
+   - Changed from direct link navigation to hover-triggered dropdown
+
+2. **Improved HoverMenu Styling** (`storefront/src/styles/reusableStyles.tsx`):
+   - Updated background color from gray to white for better readability
+   - Enhanced positioning for the customer menu (right-aligned, below icon)
+   - Added proper shadows, borders, and rounded corners
+   - Improved transition animations for smooth appearance
+   - Set minimum width and proper spacing for menu items
+
+3. **Added Interactive Features:**
+   - Hover effects on menu items with background color changes
+   - Proper cursor states and click handling
+   - Divider between account options and logout
+   - Smooth transitions and animations
+
+**Key Files Modified:**
+
+- `storefront/src/components/molecules/UserMenu.tsx` (complete rewrite)
+- `storefront/src/styles/reusableStyles.tsx` (HoverMenu styling updates)
+
+**Testing:**
+
+- Verified dropdown appears on hover in both logged-in and logged-out states
+- Confirmed all menu items navigate to correct pages
+- Tested logout functionality successfully ends session
+- Validated visual styling matches site design system
+
+**Lesson Learned:** When implementing dropdown menus, ensure the component structure includes both the trigger element and the menu content. Leverage existing styled components (like `HoverMenu` and `Dropdown`) that already have hover logic built-in, rather than reimplementing from scratch.
+
+### Test Account Creation (Jan 17, 2026)
+
+**Purpose:** Created a verified test account in the Vendure database to enable comprehensive testing of customer-facing features without requiring email verification.
+
+**Implementation:**
+
+1. **Created Test Account via Vendure Admin Panel:**
+   - Navigated to Customers section in admin UI (http://localhost:3000/admin)
+   - Created new customer with verified status
+   - Set secure password meeting validation requirements
+
+**Test Account Credentials:**
+
+```
+Email: test@awadhgully.com
+Password: TestUser123!
+Status: Verified ✓
+Name: Test User
+```
+
+**Testing Capabilities:**
+
+This account enables testing of:
+
+- ✅ Sign In/Sign Out functionality
+- ✅ Account Management (view/edit profile)
+- ✅ Address Management (add/edit/delete addresses)
+- ✅ Order Management (view order history)
+- ✅ Password Change functionality
+- ✅ Shopping Cart operations
+- ✅ Complete checkout flows
+- ✅ User menu dropdown (all logged-in options)
+
+**Verification:**
+
+- Successfully logged in via storefront sign-in page
+- Confirmed account details display correctly in "My Account" section
+- Verified user menu dropdown shows logged-in state with checkmark icon
+- Tested logout functionality returns to logged-out state
+
+**Lesson Learned:** Having a pre-verified test account in development environments significantly speeds up testing workflows by eliminating the need for email verification steps. Always create test accounts through the admin panel with proper verification status for realistic testing scenarios.
+
 ### Checkout Form Default Values (Jan 16, 2026)
 
 **Issue:** The checkout form's country dropdown wasn't properly defaulting to India, and users had to manually select country, province, and city.
