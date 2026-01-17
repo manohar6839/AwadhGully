@@ -1,9 +1,9 @@
 # Dependencies
-node_modules/
-dist/
-.next/
-out/
-build/
+**/node_modules/
+**/dist/
+**/.next/
+**/out/
+**/build/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -36,3 +36,4 @@ vendure/packages/dev-server/custom-admin-ui/
 
 # Custom Backups (we will white-list the ones we want if needed, but usually we don't want them in git)
 backups/
+*.log

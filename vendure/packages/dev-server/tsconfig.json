@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@vendure/core": ["../core/src/index"],
+            "@vendure/common": ["../common/src/index"],
+            "@vendure/asset-server-plugin": ["../asset-server-plugin/src/index"],
+            "@vendure/admin-ui-plugin": ["../admin-ui-plugin/src/index"],
+            "@vendure/email-plugin": ["../email-plugin/src/index"]
+        },
+        "outDir": "dist",
+        "noEmit": false
+    },
+    "include": ["**/*.ts"]
+}
