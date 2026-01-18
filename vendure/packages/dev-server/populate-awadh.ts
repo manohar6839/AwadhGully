@@ -64,7 +64,8 @@ if (require.main === module) {
             ZoneService,
             CountryService,
             AssetService,
-            RequestContextService
+            RequestContextService,
+            CustomerService
         } = await import('@vendure/core');
 
         let ctx = await app.get(RequestContextService).create({
@@ -226,8 +227,28 @@ if (require.main === module) {
             });
         }
 
-        console.log('populating customers...');
-        await populateCustomers(app, 10, message => Logger.error(message));
+        // Create specific test customer
+        const customerService = app.get(CustomerService);
+        const customer = await customerService.create(ctx, {
+            firstName: 'Test',
+            lastName: 'User',
+            emailAddress: 'test@awadhgully.com',
+            password: 'TestUser123!',
+            phoneNumber: '9876543210',
+            title: 'Mr',
+        });
+        
+        if (customer && !(customer instanceof Error)) {
+             // Verify the customer directly via database or service hack if needed, 
+             // but usually create() with password sends verification email. 
+             // Since we have authOptions.requireVerification = false in config, they should be active immediately check config.
+             console.log('Created Test User: test@awadhgully.com / TestUser123!');
+        } else {
+            console.log('Failed to create test user', customer);
+        }
+
+        console.log('populating random customers...');
+        await populateCustomers(app, 5, message => Logger.error(message));
         await app.close();
         process.exit(0);
 

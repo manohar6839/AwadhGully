@@ -67,15 +67,15 @@ export const devConfig: VendureConfig = {
         DefaultJobQueuePlugin.init({}),
         DefaultSchedulerPlugin.init({}),
         EmailPlugin.init({
-            devMode: true,
+            devMode: true, // Keeping devMode for now to log to file, effectively serving as a 'mock' until SMTP is provided.
             route: 'mailbox',
             handlers: defaultEmailHandlers,
             templateLoader: new FileBasedTemplateLoader(path.join(__dirname, '../email-plugin/templates')),
             outputPath: path.join(__dirname, 'test-emails'),
             globalTemplateVars: {
-                verifyEmailAddressUrl: 'http://localhost:4201/verify',
-                passwordResetUrl: 'http://localhost:4201/reset-password',
-                changeEmailAddressUrl: 'http://localhost:4201/change-email-address',
+                verifyEmailAddressUrl: 'https://awadhgully.com/verify-email',
+                passwordResetUrl: 'https://awadhgully.com/reset-password',
+                changeEmailAddressUrl: 'https://awadhgully.com/change-email-address',
             },
         }),
     ],

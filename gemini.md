@@ -460,3 +460,27 @@ This script handles the entire process:
     *   **Cause:** The production database was blank.
     *   **Fix:** Ran the population script directly on the server: `npx tsx packages/dev-server/populate-awadh.ts`. Note: Had to run from the `packages/dev-server` directory to pick up the correct `.env` (Postgres config).
     *   **Lesson:** Deployment != Data Migration. Automated deployments should include a migration/seeding step if the database is expected to be fresh.
+
+5.  **Authentication Failure (Channel Token Mismatch):**
+    *   **Issue:** Login failed for newly created users ("Incorrect credentials").
+    *   **Cause:** Re-populating the database generated a new default channel with a random token, but the frontend was using the old token (`fosrdc0pacptsremtq5`).
+    *   **Fix:** Updated the database default channel token to match the frontend using a direct SQL script (`fix-state-sql.ts`).
+    *   **Lesson:** When resetting a database for an existing frontend build, ensure the Channel Token is restored to match the build configuration.
+
+6.  **User Authentication Failure (Missing Password Hash):**
+    *   **Issue:** Even after fixing the channel token, login failed with "Invalid credentials".
+    *   **Cause:** The `populate-awadh.ts` script created the user entity but failed to generate/store the password hash in the `authentication_method` table, likely due to configuration nuance in the bootstrap context.
+    *   **Fix:** Created and ran a diagnostic script (`debug-auth.ts`) that confirmed the empty hash, generated a valid `bcrypt` hash for `TestUser123!` using `bcryptjs`, and manually updated the database record.
+    *   **Lesson:** Verify user creation success by inspecting the database (specifically `authentication_method`) if login fails immediately after seed.
+
+7.  **Admin UI Health Check Failure (Nginx Routing):**
+    *   **Issue:** Admin UI showed "Http failure during parsing" for `/health` endpoint.
+    *   **Cause:** Nginx didn't have a specific location block for `/health`, so requests fell through to the Storefront (Port 3001) instead of the Backend (Port 3000), returning an HTML error page instead of JSON.
+    *   **Fix:** Added a dedicated `location /health` block in Nginx config proxying to `http://127.0.0.1:3000`.
+    *   **Lesson:** When routing API endpoints, ensure every backend service path (like `/health`) is explicitly defined in Nginx if the default fallback goes to a different service (like the frontend).
+
+8.  **Login Failure & Data Integrity (Manual User Correction):**
+    *   **Issue:** Users reported inability to login with seeded test accounts ("Invalid Credentials").
+    *   **Cause:** Seed scripts sometimes failed to create the password hash or authentication method correctly in the specific production DB environment.
+    *   **Fix:** Created `create-verified-user.ts` to explicitly INSERT or UPDATE the `user`, `customer`, and `authentication_method` tables with a known valid bcrypt hash.
+    *   **Command:** `npx tsx create-verified-user.ts` (Run on server in `vendure` directory).
