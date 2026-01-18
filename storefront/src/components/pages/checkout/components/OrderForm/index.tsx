@@ -228,16 +228,21 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 });
 
                 if (setCustomerForOrder?.__typename !== 'Order') {
-                    if (setCustomerForOrder.__typename === 'EmailAddressConflictError') {
+                    if (setCustomerForOrder.__typename === 'AlreadyLoggedInError') {
+                        // User is already logged in, skip customer creation and continue
+                        // This can happen if user logged in during checkout
+                        console.log('User already logged in, continuing with checkout');
+                    } else if (setCustomerForOrder.__typename === 'EmailAddressConflictError') {
                         // TODO: IN THIS CASE WE SHOULD SHOW THE LOGIN FORM or ADD A LINK TO LOGIN
                         setError('emailAddress', {
                             message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`),
                         });
                         setFocus('emailAddress');
+                        return;
                     } else {
                         setError('root', { message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`) });
+                        return;
                     }
-                    return;
                 }
             }
 

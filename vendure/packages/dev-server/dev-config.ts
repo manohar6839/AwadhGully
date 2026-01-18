@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { ADMIN_API_PATH, API_PORT, SHOP_API_PATH } from '@vendure/common/lib/shared-constants';
 import {
@@ -12,40 +11,23 @@ import {
     SettingsStoreScopes,
     VendureConfig,
 } from '@vendure/core';
-import { DashboardPlugin } from '@vendure/dashboard/plugin';
 import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@vendure/email-plugin';
-import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
-
-
 import 'dotenv/config';
 import path from 'path';
 import { DataSourceOptions } from 'typeorm';
 
-
-const IS_INSTRUMENTED = process.env.IS_INSTRUMENTED === 'true';
-
-/**
- * Config settings used during development
- */
 export const devConfig: VendureConfig = {
     apiOptions: {
-        port: API_PORT,
+        hostname: '0.0.0.0',
+        port: 3000,
         adminApiPath: ADMIN_API_PATH,
-        adminApiPlayground: {
-            settings: {
-                'request.credentials': 'include',
-            },
-        },
+        adminApiPlayground: { settings: { 'request.credentials': 'include' } },
         adminApiDebug: true,
         shopApiPath: SHOP_API_PATH,
-        shopApiPlayground: {
-            settings: {
-                'request.credentials': 'include',
-            },
-        },
+        shopApiPlayground: { settings: { 'request.credentials': 'include' } },
         shopApiDebug: true,
         cors: {
-            origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+            origin: ['http://localhost:3001', 'http://127.0.0.1:3001', 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://143.110.191.214', 'http://143.110.191.214:3001', 'http://143.110.191.214:3000', 'http://awadhgully.com', 'https://awadhgully.com', 'http://www.awadhgully.com', 'https://www.awadhgully.com'],
             credentials: true,
         },
     },
@@ -54,9 +36,7 @@ export const devConfig: VendureConfig = {
         tokenMethod: ['bearer', 'cookie'] as const,
         requireVerification: true,
         customPermissions: [],
-        cookieOptions: {
-            secret: 'abc',
-        },
+        cookieOptions: { secret: 'abc' },
     },
     dbConnectionOptions: {
         synchronize: false,
@@ -69,13 +49,8 @@ export const devConfig: VendureConfig = {
     },
     settingsStoreFields: {
         MyPlugin: [
-            {
-                name: 'globalVal',
-            },
-            {
-                name: 'userVal',
-                scope: SettingsStoreScopes.user,
-            },
+            { name: 'globalVal' },
+            { name: 'userVal', scope: SettingsStoreScopes.user },
         ],
     },
     customFields: {},
@@ -84,26 +59,12 @@ export const devConfig: VendureConfig = {
         importAssetsDir: path.join(__dirname, 'import-assets'),
     },
     plugins: [
-        // MultivendorPlugin.init({
-        //     platformFeePercent: 10,
-        //     platformFeeSKU: 'FEE',
-        // }),
-
-        GraphiqlPlugin.init(),
         AssetServerPlugin.init({
             route: 'assets',
-            assetUploadDir: path.join(__dirname, 'assets'),
+            assetUploadDir: path.join(__dirname, '../../assets'),
         }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: false }),
-        // Enable if you need to debug the job queue
-        // BullMQJobQueuePlugin.init({}),
         DefaultJobQueuePlugin.init({}),
-        // JobQueueTestPlugin.init({ queueCount: 10 }),
-        // ElasticsearchPlugin.init({
-        //     host: 'http://localhost',
-        //     port: 9200,
-        //     bufferUpdates: true,
-        // }),
         DefaultSchedulerPlugin.init({}),
         EmailPlugin.init({
             devMode: true,
@@ -117,41 +78,6 @@ export const devConfig: VendureConfig = {
                 changeEmailAddressUrl: 'http://localhost:4201/change-email-address',
             },
         }),
-
-
-        // AdminUiPlugin.init({
-        //     route: 'admin',
-        //     port: 5001,
-        //     adminUiConfig: {},
-        //     // Un-comment to compile a custom admin ui
-        //     // app: compileUiExtensions({
-        //     //     outputPath: path.join(__dirname, './custom-admin-ui'),
-        //     //     extensions: [
-        //     //         {
-        //     //             id: 'ui-extensions-library',
-        //     //             extensionPath: path.join(__dirname, 'example-plugins/ui-extensions-library/ui'),
-        //     //             routes: [{ route: 'ui-library', filePath: 'routes.ts' }],
-        //     //             providers: ['providers.ts'],
-        //     //         },
-        //     //         {
-        //     //             globalStyles: path.join(
-        //     //                 __dirname,
-        //     //                 'test-plugins/with-ui-extension/ui/custom-theme.scss',
-        //     //             ),
-        //     //         },
-        //     //     ],
-        //     //     devMode: true,
-        //     // }),
-        // }),
-        AdminUiPlugin.init({
-            route: 'admin',
-            port: 5001,
-            adminUiConfig: {},
-        }),
-        // DashboardPlugin.init({
-        //     route: 'dashboard',
-        //     appDir: path.join(__dirname, './dist'),
-        // }),
     ],
 };
 
@@ -170,33 +96,11 @@ function getDbConfig(): DataSourceOptions {
                 database: process.env.DB_NAME || 'vendure-dev',
                 schema: process.env.DB_SCHEMA || 'public',
             };
-        case 'sqlite':
-            console.log('Using better-sqlite3 connection');
-            return {
-                synchronize: false,
+        default:
+             return {
+                synchronize: true,
                 type: 'better-sqlite3',
                 database: path.join(__dirname, 'vendure.sqlite'),
-            };
-        case 'sqljs':
-            console.log('Using sql.js connection');
-            return {
-                type: 'sqljs',
-                autoSave: true,
-                database: new Uint8Array([]),
-                location: path.join(__dirname, 'vendure.sqlite'),
-            };
-        case 'mysql':
-        case 'mariadb':
-        default:
-            console.log('Using mysql connection');
-            return {
-                synchronize: true,
-                type: 'mariadb',
-                host: '127.0.0.1',
-                port: 3306,
-                username: 'vendure',
-                password: 'password',
-                database: 'vendure-dev',
             };
     }
 }

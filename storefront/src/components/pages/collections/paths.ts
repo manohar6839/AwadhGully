@@ -43,6 +43,17 @@ const getCollectionsPaths = async () => {
 };
 
 export const getStaticPaths = async () => {
-    const paths = await getCollectionsPaths();
-    return { paths, fallback: false };
+    // Skip static path generation during Docker builds where API is not accessible
+    // Pages will be generated on-demand with fallback: 'blocking'
+    if (process.env.SKIP_BUILD_STATIC_GENERATION === 'true') {
+        return { paths: [], fallback: 'blocking' };
+    }
+
+    try {
+        const paths = await getCollectionsPaths();
+        return { paths, fallback: 'blocking' };
+    } catch (error) {
+        console.warn('Failed to fetch collection paths, using fallback:', error);
+        return { paths: [], fallback: 'blocking' };
+    }
 };

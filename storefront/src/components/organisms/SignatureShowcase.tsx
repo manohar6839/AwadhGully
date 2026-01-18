@@ -169,7 +169,7 @@ export const SignatureShowcase: React.FC<{ products?: any[] }> = ({ products }) 
                                 <PriceAtom
                                     price={getPriceValue(p.priceWithTax)}
                                     currencyCode={p.currencyCode}
-                                    size="1.8rem"
+                                    size="1.75rem"
                                     weight={600}
                                 />
                             </PriceWrapper>

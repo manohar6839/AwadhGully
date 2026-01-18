@@ -76,7 +76,13 @@ export function makeServerSideProps(ns: Array<keyof typeof resources>) {
     };
 }
 
-export const getStaticPaths = () => ({
-    fallback: false,
-    paths: getStandardLocalePaths(),
-});
+export const getStaticPaths = () => {
+    // Skip static path generation during Docker builds where API is not accessible
+    if (process.env.SKIP_BUILD_STATIC_GENERATION === 'true') {
+        return { paths: [], fallback: 'blocking' };
+    }
+    return {
+        fallback: 'blocking',
+        paths: getStandardLocalePaths(),
+    };
+};

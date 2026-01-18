@@ -9,41 +9,59 @@ const slugsOfBestOf = ['home-garden', 'electronics', 'sports-outdoor'];
 
 export const getStaticProps = async (ctx: ContextModel) => {
     const r = await makeStaticProps(['common', 'homepage'])(ctx);
-    const api = SSGQuery(r.context);
 
-    const products = await api({
-        search: [
-            { input: { take: 4, groupByProduct: true, sort: { price: SortOrder.ASC } } },
-            { items: ProductSearchSelector },
-        ],
-    });
+    try {
+        const api = SSGQuery(r.context);
 
-    const sliders = await Promise.all(
-        slugsOfBestOf
-            .map(async slug => {
-                const section = await api({
-                    collection: [{ slug }, homePageSlidersSelector],
-                });
-                if (!section.collection) return null;
-                return section.collection;
-            })
-            .filter((x): x is Promise<HomePageSlidersType> => !!x),
-    );
+        const products = await api({
+            search: [
+                { input: { take: 4, groupByProduct: true, sort: { price: SortOrder.ASC } } },
+                { items: ProductSearchSelector },
+            ],
+        });
 
-    const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
+        const sliders = await Promise.all(
+            slugsOfBestOf
+                .map(async slug => {
+                    const section = await api({
+                        collection: [{ slug }, homePageSlidersSelector],
+                    });
+                    if (!section.collection) return null;
+                    return section.collection;
+                })
+                .filter((x): x is Promise<HomePageSlidersType> => !!x),
+        );
 
-    const returnedStuff = {
-        props: {
-            ...r.props,
-            ...r.context,
-            products: products.search.items,
-            categories: collections,
-            navigation,
-            sliders,
-        },
-        revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
-    };
+        const collections = await getCollections(r.context);
+        const navigation = arrayToTree(collections);
 
-    return returnedStuff;
+        const returnedStuff = {
+            props: {
+                ...r.props,
+                ...r.context,
+                products: products.search.items,
+                categories: collections,
+                navigation,
+                sliders,
+            },
+            revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
+        };
+
+        return returnedStuff;
+    } catch (error) {
+        console.warn('Failed to fetch home page data, using fallback:', error);
+        // Return minimal props when API is not available (e.g., during Docker build)
+        // navigation must be null (not []) since Footer expects RootNode | null
+        return {
+            props: {
+                ...r.props,
+                ...r.context,
+                products: [],
+                categories: [],
+                navigation: null,
+                sliders: [],
+            },
+            revalidate: 1, // Retry quickly
+        };
+    }
 };

@@ -1,0 +1,48 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Set build-time environment variables
+ARG NEXT_PUBLIC_API_URL=https://awadhgully.com/shop-api
+ARG NEXT_PUBLIC_HOST=https://awadhgully.com
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_HOST=$NEXT_PUBLIC_HOST
+
+# Skip static page generation since API is not accessible during Docker build
+# Pages will be generated on-demand with fallback: 'blocking'
+ENV SKIP_BUILD_STATIC_GENERATION=true
+
+# Build the application
+RUN npm run build
+
+# CRITICAL: Prepare standalone package with static files
+# Next.js standalone output doesn't include static files by default
+RUN cp -r .next/static .next/standalone/.next/static && \
+    cp -r public .next/standalone/public
+
+# Production stage - minimal output for artifact extraction and running
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Copy only the standalone directory (includes server.js, node_modules, etc.)
+COPY --from=builder /app/.next/standalone ./
+
+EXPOSE 3001
+
+ENV PORT=3001
+ENV HOSTNAME=0.0.0.0
+
+CMD ["node", "server.js"]

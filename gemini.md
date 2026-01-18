@@ -279,3 +279,184 @@ We successfully restored the full Vendure backend by resolving a complex chain o
 
 - **Issue:** Nested `.git` directories in `storefront` and `vendure` caused confusion.
 - **Fix:** Consolidated into a single root git repository to track the entire project state.
+
+### Production Deployment & Troubleshooting (Jan 18, 2026)
+
+**Goal:** Restore functionality to a DigitalOcean Droplet where the Storefront was missing images and failing to connect to the backend.
+
+**Critical Configuration Learnings:**
+
+1.  **IPv6 vs IPv4 Binding (Connection Refused):**
+    *   **Issue:** Nginx (IPv4) could not connect to Node.js (defaulting to IPv6 `::1` on Node 17+) on `localhost`.
+    *   **Fix:** Explicitly set `hostname: '0.0.0.0'` in `dev-config.ts` `apiOptions`. This forces binding to ALL interfaces.
+    *   **Snippet:**
+        ```typescript
+        apiOptions: {
+            hostname: '0.0.0.0', // CRITICAL for Nginx Proxy
+            port: 3000,
+            // ...
+        }
+        ```
+
+2.  **Asset Directory Mismatch (Missing Images):**
+    *   **Issue:** Images were missing despite the server running.
+    *   **Cause:** `AssetServerPlugin` was pointing to `dev-server/assets` (empty) instead of the project root `assets`.
+    *   **Fix:** Update path to `path.join(__dirname, '../../assets')`.
+
+3.  **Phantom Plugins (Build Failures):**
+    *   **Issue:** `npm run build` failed with `Cannot find module`, causing the server to run old code.
+    *   **Cause:** Importing `DashboardPlugin` or `AdminUiPlugin` when they are not installed/configured strictly.
+    *   **Fix:** **Only** include plugins present in `package.json`. If restoring stability, comment out complex plugins (like AdminUI) first.
+
+4.  **Admin UI Architecture:**
+    *   **Guidance:** Attempting to run Admin UI as Middleware (Port 3000) crashed the process.
+    *   **Recommendation:** Run Admin UI as a separate simplified build or stick to strict port separation (5001) proxied via Nginx.
+    *   **Pro Tip:** For maximum stability, **serve the Admin UI static files directly via Nginx** (using `alias` and `try_files`) instead of proxying to a Node server. This decouples the Admin Panel from the Backend API status.
+
+5.  **PM2 Interactive Pager (Stuck at Colon):**
+    *   **Issue:** Running `pm2 stop all` or similar commands hangs at a `:` prompt.
+    *   **Cause:** PM2 outputs long lists to a pager (like `less`).
+    *   **Fix:** Press `q` to exit. For scripts, use `pm2 stop all | cat` to bypass the pager.
+
+6.  **Monitoring Silent Installs:**
+    *   **Issue:** `npm install` with Swap runs silently for 10+ minutes, looking "frozen".
+    *   **Verify:** Open a **second terminal**, SSH in, and run `top`.
+    *   **Signs of Life:** `node`, `npm`, or `kswapd0` using CPU/Memory means it is working.
+
+### SSL & Production Configuration (Jan 18, 2026)
+
+**Goal:** Secure the deployment with SSL and ensure correct internal routing.
+
+**Critical Learnings:**
+
+1.  **The "No Healthy Upstream" Build Error (Next.js SSR):**
+    *   **Issue:** `npm run build` failed with `FetchError` or `502` when `NEXT_PUBLIC_API_URL` was set to `https://awadhgully.com/shop-api`.
+    *   **Cause:** The server tried to reach its own public domain during the build (Static Generation). Without a loopback entry, the request went out to the internet and hit the Droplet's external firewall or failed DNS resolution, rather than hitting `localhost:3000`.
+    *   **Fix:** Add the domain to `/etc/hosts` to force local resolution.
+    *   **Snippet:** `echo "127.0.0.1 awadhgully.com www.awadhgully.com" >> /etc/hosts`
+
+2.  **Asset Migration Strategy:**
+    *   **Issue:** Products appeared in the DB but images were broken.
+    *   **Cause:** The `populate` script creates DB entries referencing images (e.g., `assets/preview.jpg`), but does *not* upload the physical files from your local machine.
+    *   **Fix:** Manually SCP the assets *before* running populate, or ensure the local `assets` folder is mirrored to the server.
+    *   **Command:** `scp -r mock-data/assets root@IP:/var/www/awadhgully/...`
+
+3.  **Environment Variable Consistency:**
+    *   **Issue:** "Add to Cart" failed due to Mixed Content (HTTPS site calling HTTP API).
+    *   **Fix:** Ensure `NEXT_PUBLIC_API_URL` in `.env.production` uses `https://` matching the site's protocol.
+    *   **Important:** This requires the Backend to be running and accessible via that HTTPS URL (see point #1) during the build.
+
+4.  **PM2 Process Hygiene:**
+    *   **Issue:** `EADDRINUSE: 3000`.
+    *   **Cause:** `pm2 restart` doesn't always clear zombie processes or released ports immediately.
+    *   **Fix:** Use `pm2 delete all && killall node` for a true hard reset when changing low-level configs (env vars, ports).
+
+5.  **Nginx & Port Conflicts (The 502/404 Saga):**
+    *   **Issue:** Nginx returned 502/404 because both the Backend and Storefront tried to default to Port 3000.
+    *   **Fix:**
+        *   **Backend:** Runs on Port 3000.
+        *   **Storefront:** Patched `package.json` to `"start": "next start -p 3001"`.
+        *   **Nginx:** Updated config to proxy `/` to `3001` and `/shop-api` to `3000`.
+
+    **Nginx Config Snippet:**
+    ```nginx
+    # Storefront on 3001
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        # ... standard headers
+    }
+    # Backend on 3000
+    location /shop-api {
+        proxy_pass http://127.0.0.1:3000;
+    }
+    ```
+
+6.  **Resource Management (Swap):**
+    *   **Issue:** Builds crashed with "Killed" or "Timeout" due to 1GB RAM limit.
+    *   **Fix:** Added 2GB Swap File.
+    *   **Command:** `fallocate -l 2G /swapfile && mkswap /swapfile && swapon /swapfile`.
+
+### 8. Docker Standalone Deployment Strategy (Jan 19, 2026)
+
+**Goal:** Efficiently build and deploy the Next.js storefront using Docker standalone output, bypassing server resource constraints.
+
+**Key Components:**
+
+1.  **Optimized Dockerfile (`storefront/Dockerfile.build`):**
+    *   Uses `output: 'standalone'` for a minimal production build.
+    *   **Environment Variable:** `SKIP_BUILD_STATIC_GENERATION=true` to skip expensive SSG during the build phase (since the API isn't accessible).
+    *   **Manual Asset Injection:** Explicitly copies `.next/static` and `public` into the `standalone` directory to ensure all assets are available.
+    *   **Runtime Command:** Executes `node server.js` directly for maximum efficiency and compatibility.
+
+2.  **Deployment Script (`docker-deploy.sh`):**
+    *   Builds the Docker image locally (leveraging local RAM).
+    *   Extracts the standalone package (approx. 50-100MB) into a `deployment-package` directory.
+    *   Transfers the package to the server via `rsync`.
+    *   Automates PM2 management (backup, extraction, and restart).
+
+3.  **Stability Optimizations:**
+    *   **SSG Fallback:** Changed `fallback: false` to `fallback: 'blocking'` in product and collection paths to allow on-demand generation on the server.
+    *   **Error Handling:** Added try/catch blocks with fallback properties in `props.ts` to prevent crashes when the API is unavailable.
+    *   **Resource Limits:** Reduced PM2 memory limit to 300MB in `ecosystem.config.js`.
+
+**Deployment Workflow:**
+
+```bash
+./docker-deploy.sh
+```
+
+This script handles the entire process:
+1. Local Docker build
+2. Standalone artifact extraction
+3. Server backup creation
+4. Rsync upload
+5. PM2 restart with `server.js`
+6. Automated health checks (HTTP 200 verification)
+
+### Troubleshooting & Fixes (Jan 19, 2026)
+
+**Goal:** Deployment and Connection Fixes for Production Environment.
+
+**Critical Learnings:**
+
+1.  **Admin UI Connectivity (Mixed Content & Protocol Mismatch):**
+    *   **Issue:** The Admin Panel loaded but showed a connection error and couldn't fetch data.
+    *   **Cause:** The `vendure-ui-config.json` was configured to point to `http://<IP_ADDRESS>:80/admin-api`, but the site was accessed via `https://awadhgully.com`. Browsers block mixed content (HTTP requests from HTTPS pages).
+    *   **Fix:** Updated `vendure-ui-config.json` on the server to use the secure domain and port.
+    *   **Configuration:**
+        ```json
+        {
+            "apiHost": "https://awadhgully.com",
+            "apiPort": "443",
+            "adminApiPath": "admin-api",
+            ...
+        }
+        ```
+    *   **Lesson:** Always ensure the API configuration matches the protocol (HTTPS) and domain of the deployment environment.
+
+2.  **Storefront Menu & Cart Failure (Channel Token Mismatch):**
+    *   **Issue:** The Storefront loaded, but the navigation menu was empty, and "Add to Cart" failed.
+    *   **Cause:** The frontend was hardcoded with `default-channel` as the token, but the production database (Postgres) used a generated token (e.g., `fosrdc0pacptsremtq5`).
+    *   **Fix:**
+        1.  Retrieved the correct token from the DB: `SELECT token FROM channel;`
+        2.  Updated `storefront/src/lib/consts.ts`: `export const DEFAULT_CHANNEL = 'fosrdc0pacptsremtq5';`
+    *   **Lesson:** The Channel Token acts as the API key for the frontend. If it doesn't match the backend database, all channel-aware requests (products, collections, orders) will silently fail or return empty results.
+
+3.  **Docker Build "No Space Left on Device" (Context Optimization):**
+    *   **Issue:** `docker build` failed with I/O errors because the build context was too large (>300MB), filling up the temporary disk space.
+    *   **Cause:** The build was copying `deployment.tar.gz` (the output of previous builds) and the local `node_modules` folder into the Docker daemon.
+    *   **Fix:** Created a `.dockerignore` file:
+        ```text
+        node_modules
+        .next
+        deployment-package
+        deployment.tar.gz
+        .git
+        ```
+    *   **Lesson:** Always use `.dockerignore` in CI/CD or local build scripts to exclude heavy artifacts. It speeds up builds and prevents disk exhaustion.
+
+4.  **Database Seeding in Production:**
+    *   **Issue:** After a fresh deployment, the Admin Panel was empty (no products).
+    *   **Cause:** The production database was blank.
+    *   **Fix:** Ran the population script directly on the server: `npx tsx packages/dev-server/populate-awadh.ts`. Note: Had to run from the `packages/dev-server` directory to pick up the correct `.env` (Postgres config).
+    *   **Lesson:** Deployment != Data Migration. Automated deployments should include a migration/seeding step if the database is expected to be fresh.

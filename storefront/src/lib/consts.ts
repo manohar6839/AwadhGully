@@ -14,7 +14,7 @@
 //     { slug: 'cz', channel: 'cz-channel', nationalLocale: 'cz', locales: ['cz', 'en'] },
 // ];
 
-export const DEFAULT_CHANNEL = 'default-channel';
+export const DEFAULT_CHANNEL = 'fosrdc0pacptsremtq5';
 export const DEFAULT_CHANNEL_SLUG = 'en';
 
 export const DEFAULT_LOCALE = 'en';
@@ -23,7 +23,7 @@ export const DEFAULT_NATIONAL_LOCALE = 'en';
 export const channels = [
     {
         slug: DEFAULT_CHANNEL_SLUG,
-        channel: DEFAULT_CHANNEL,
+        channel: 'fosrdc0pacptsremtq5',
         nationalLocale: DEFAULT_NATIONAL_LOCALE,
         locales: ['en', 'pl', 'fr', 'de', 'ja', 'es'],
     },
