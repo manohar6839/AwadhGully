@@ -1,116 +1,12 @@
 import React from 'react';
-import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const HeroSection = styled.section`
-    position: relative;
-    height: 90vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    background-color: #000;
-    overflow: hidden;
-`;
-
-const BackgroundImage = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    opacity: 0.6;
-    
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, #180507 0%, rgba(24, 5, 7, 0.8) 40%, rgba(24, 5, 7, 0) 100%);
-    }
-`;
-
-const ContentContainer = styled.div`
-    position: relative;
-    z-index: 2;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    width: 100%;
-`;
-
-const Tagline = styled.h1`
-    font-family: var(--font-playfair), serif;
-    font-size: 5rem;
-    font-weight: 700;
-    color: #FAF7F2;
-    margin-bottom: 1.5rem;
-    line-height: 1.1;
-    max-width: 800px;
-
-    @media (max-width: 768px) {
-        font-size: 3.5rem;
-    }
-`;
-
-const SubHeadline = styled.p`
-    font-family: var(--font-poppins), sans-serif;
-    font-size: 1.8rem;
-    color: rgba(250, 247, 242, 0.9);
-    margin-bottom: 3rem;
-    max-width: 600px;
-    letter-spacing: 0.5px;
-`;
-
-const ButtonGroup = styled.div`
-    display: flex;
-    gap: 1.5rem;
-`;
-
-const PrimaryButton = styled(Link)`
-    background-color: #5A0F1B;
-    color: #FAF7F2;
-    padding: 1rem 2.5rem;
-    font-family: var(--font-poppins), sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid #5A0F1B;
-    transition: all 0.3s ease;
-    display: inline-block;
-
-    &:hover {
-        background-color: #7A1F2E;
-        border-color: #7A1F2E;
-        color: #fff;
-    }
-`;
-
-const OutlineButton = styled(Link)`
-    background-color: transparent;
-    color: #FAF7F2;
-    padding: 1rem 2.5rem;
-    font-family: var(--font-poppins), sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid #FAF7F2;
-    transition: all 0.3s ease;
-    display: inline-block;
-
-    &:hover {
-        background-color: rgba(250, 247, 242, 0.1);
-        color: #fff;
-    }
-`;
-
 export const AwadhHero: React.FC = () => {
     return (
-        <HeroSection>
-            <BackgroundImage>
+        <section className="relative h-screen w-full flex items-center bg-black overflow-hidden">
+            {/* Background Image with Gradient Overlay */}
+            <div className="absolute top-0 left-0 w-full h-full z-10 opacity-60 pointer-events-none">
                 <Image 
                     src="/hero-background.png" 
                     alt="Awadh Gully cuisine" 
@@ -118,17 +14,34 @@ export const AwadhHero: React.FC = () => {
                     style={{ objectFit: 'cover' }}
                     priority
                 />
-            </BackgroundImage>
-            <ContentContainer>
-                <Tagline>Royal Awadhi Flavors,<br />Modernly Served.</Tagline>
-                <SubHeadline>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#180507] via-[#180507cc] to-transparent"></div>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-20 container mx-auto px-8">
+                <h1 className="font-serif text-5xl md:text-7xl font-bold text-awadh-ivory mb-6 leading-tight max-w-4xl">
+                    Royal Awadhi Flavors,<br />
+                    Modernly Served.
+                </h1>
+                <p className="font-sans text-lg text-awadh-ivory/90 mb-12 max-w-xl tracking-wide">
                     A culinary journey back to the royal kitchens of the Nawabs, reimagined for the pace of the modern urban gourmand.
-                </SubHeadline>
-                <ButtonGroup>
-                    <PrimaryButton href="#menu">Order Now</PrimaryButton>
-                    <OutlineButton href="#story">View Our Story</OutlineButton>
-                </ButtonGroup>
-            </ContentContainer>
-        </HeroSection>
+                </p>
+                <div className="flex gap-6">
+                    <Link href="#menu" className="bg-awadh-maroon text-awadh-ivory px-10 py-4 font-sans font-medium uppercase tracking-widest border border-transparent transition-all hover:bg-[#7A1F2E] hover:border-awadh-gold hover:text-white hover:shadow-[0_0_20px_rgba(90,15,27,0.5)]">
+                        Order Now
+                    </Link>
+                    <Link href="#story" className="bg-transparent text-awadh-ivory px-10 py-4 font-sans font-medium uppercase tracking-widest border border-awadh-ivory transition-all hover:bg-awadh-ivory/10 hover:text-white">
+                        View Our Story
+                    </Link>
+                </div>
+            </div>
+            
+            {/* Scroll Indicator (Added from Royal Design) */}
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-awadh-ivory animate-bounce text-opacity-70 z-20">
+                <span className="text-xs tracking-widest uppercase mb-2 block text-center">Scroll</span>
+                <i className="fa-solid fa-chevron-down text-xl"></i>
+            </div>
+        </section>
     );
 };
+

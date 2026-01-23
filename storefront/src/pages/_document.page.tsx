@@ -13,6 +13,7 @@ export default class MyDocument extends Document {
             <Html lang={lang}>
                 <Head>
                 <meta name="robots" content="noindex"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
                     {/* enable analytics script only for production */}
                     {/* {isProduction && (
                         <>

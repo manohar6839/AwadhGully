@@ -17,7 +17,7 @@ import { Client } from 'pg';
         const res = await client.query(`
             SELECT identifier, "passwordHash"
             FROM "authentication_method" 
-            WHERE identifier = 'superadmin' OR identifier = 'test@awadhgully.com'
+            WHERE identifier = 'superadmin' OR identifier = 'manohar6839@gmail.com'
         `);
 
         console.log('--- PASSWORD HASHES ---');

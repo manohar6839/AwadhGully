@@ -27,11 +27,12 @@ import { Client } from 'pg';
         const validHash = adminRes.rows[0].passwordHash;
         console.log(`Found valid hash from superadmin: ${validHash.substring(0, 10)}...`);
 
-        // 2. Update Test User
-        const userRes = await client.query('SELECT id FROM "user" WHERE identifier = $1', ['test@awadhgully.com']);
+        // 2. Update Target User
+        const targetEmail = 'manohar6839@gmail.com';
+        const userRes = await client.query('SELECT id FROM "user" WHERE identifier = $1', [targetEmail]);
         
         if (userRes.rowCount === 0) {
-            console.error('Test user not found!');
+            console.error(`User ${targetEmail} not found!`);
         } else {
             const userId = userRes.rows[0].id;
             const updateRes = await client.query(`

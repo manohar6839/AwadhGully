@@ -484,3 +484,33 @@ This script handles the entire process:
     *   **Cause:** Seed scripts sometimes failed to create the password hash or authentication method correctly in the specific production DB environment.
     *   **Fix:** Created `create-verified-user.ts` to explicitly INSERT or UPDATE the `user`, `customer`, and `authentication_method` tables with a known valid bcrypt hash.
     *   **Command:** `npx tsx create-verified-user.ts` (Run on server in `vendure` directory).
+### 9. Persistent Login Failures & Email Verification (Jan 20, 2026)
+
+**Goal:** Resolve "Invalid Credentials" for test users and "Not Verified" errors for new sign-ups.
+
+**Critical Learnings:**
+
+1.  **Password Hashing Mismatch (Argon2 vs Bcrypt) - The Silent Killer:**
+    *   **Issue:** Manually creating users with `bcryptjs` hashes (starting with `$2a$` or `$2b$`) resulted in persistent "Invalid credentials" errors, even with the correct password.
+    *   **Cause:** Vendure defaults to **Argon2** hashing (hashes start with `$argon2`). Providing a Bcrypt hash caused the generic invalid error.
+    *   **Fix:** Instead of trying to install heavy libraries like `argon2` on the production server (which timed out), we **copied the known valid hash** from the `superadmin` account to the target user.
+    *   **Lesson:** Before generating hashes, always check the format of an existing working user: `SELECT "passwordHash" FROM authentication_method LIMIT 1;`.
+
+2.  **Server-Side Script Instability (Timeouts):**
+    *   **Issue:** Running complex Node.js/TypeScript scripts (`npx tsx script.ts`) on the production server frequently timed out or hung indefinitely (especially during `npm install` or DB connection).
+    *   **Fix:** Switched to **Direct SQL Execution** via SSH.
+    *   **Command:** `ssh root@<IP> "PGPASSWORD=<PASS> psql -h localhost -U <USER> -d <DB> -c \"UPDATE ...\""`
+    *   **Lesson:** For urgent production data fixes, raw SQL is infinitely faster and more reliable than heavy application-layer scripts.
+
+3.  **Email Verification in "Dev Mode":**
+    *   **Issue:** New users could not log in because they were "Unverified". The system was configured with `devMode: true`, which saves emails to `test-emails` folders instead of sending them.
+    *   **Effect:** Verification links pointed to `localhost:4201`, which is inaccessible in production.
+    *   **Fix:**
+        1.  Updated `dev-config.ts` `emailPlugin` to use production URLs (`https://awadhgully.com/verify-email`).
+        2.  **Workaround:** Manually Force-Verified users via SQL: `UPDATE "user" SET verified = true WHERE identifier = '...';`
+    *   **Lesson:** A production environment without an active SMTP provider must have a documented process for retrieving verification tokens or manually verifying users.
+
+4.  **Database Enum Types:**
+    *   **Issue:** An SQL update (`UPDATE authentication_method ... WHERE type = 'native'`) failed (`UPDATE 0`) despite the logic being correct.
+    *   **Cause:** The database stored the full string `'NativeAuthenticationMethod'`, not the simple key `'native'`.
+    *   **Lesson:** Never assume database values based on code constants. Always `SELECT` first to see the raw data format.

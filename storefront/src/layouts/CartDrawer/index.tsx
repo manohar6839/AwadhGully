@@ -24,16 +24,21 @@ export const CartDrawer = ({ activeOrder }: { activeOrder?: ActiveOrderType }) =
     const ref = useRef<HTMLDivElement>(null);
     useOutsideClick(ref, () => close());
 
+    const cartItemCount = activeOrder?.lines?.length || 0;
+
     return (
         <>
-            <IconButton onClick={open}>
-                <ShoppingCartIcon size={'2.4rem'} />
-                <QuantityBadge id="header-cart-quantity">
-                    <Quantity size="1rem" weight={500}>
-                        {activeOrder ? activeOrder.lines.length : 0}
-                    </Quantity>
-                </QuantityBadge>
-            </IconButton>
+            {cartItemCount > 0 && (
+                <button 
+                    onClick={open}
+                    className="relative flex items-center justify-center p-2 rounded-lg cursor-pointer text-awadh-ivory hover:bg-white/10 transition-colors"
+                >
+                    <ShoppingCartIcon size={'1.8rem'} />
+                    <div className="absolute -top-1 -right-1 bg-awadh-gold text-awadh-maroon text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border border-awadh-maroon">
+                        {cartItemCount}
+                    </div>
+                </button>
+            )}
             <AnimatePresence initial={false}>
                 {isOpen && (
                     <CartComponentMain
@@ -56,25 +61,6 @@ export const CartDrawer = ({ activeOrder }: { activeOrder?: ActiveOrderType }) =
         </>
     );
 };
-
-const QuantityBadge = styled.div`
-    position: absolute;
-    top: -0.5rem;
-    right: -0.5rem;
-
-    padding: 0.25rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 100%;
-    background: ${p => p.theme.gray(100)};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
-
-const Quantity = styled(TP)`
-    color: ${p => p.theme.text.main};
-`;
 
 const CartComponentMain = styled(motion.div)`
     width: 100%;

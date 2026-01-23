@@ -1,5 +1,4 @@
 import { Dropdown, HoverMenu, DropdownItem } from '@/src/styles/reusableStyles';
-import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import { Link } from '@/src/components/atoms';
@@ -28,139 +27,68 @@ export const UserMenu: React.FC<{ isLogged: boolean }> = ({ isLogged }) => {
 
     return (
         <Dropdown>
-            <IconButton aria-label="User menu">
+            <div className="flex items-center justify-center p-2 rounded-lg cursor-pointer text-awadh-ivory hover:bg-white/10 transition-colors">
                 <AnimatePresence>
                     {isLogged ? (
-                        <IconWrapper initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <UserCheck2 size="2.4rem" />
-                        </IconWrapper>
+                        <motion.div initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-10 h-10 flex items-center justify-center">
+                            <UserCheck2 size="1.8rem" />
+                        </motion.div>
                     ) : (
-                        <IconWrapper initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <User2 size="2.4rem" />
-                        </IconWrapper>
+                        <motion.div initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-10 h-10 flex items-center justify-center">
+                            <User2 size="1.8rem" />
+                        </motion.div>
                     )}
                 </AnimatePresence>
-            </IconButton>
+            </div>
             
             <HoverMenu customerMenu>
-                {isLogged ? (
-                    <>
-                        <MenuLink href="/customer/manage">
-                            <MenuItem>
-                                <UserCircle size="2rem" />
-                                <MenuText>My Account</MenuText>
-                            </MenuItem>
-                        </MenuLink>
-                        <MenuLink href="/customer/manage/orders">
-                            <MenuItem>
-                                <Package size="2rem" />
-                                <MenuText>My Orders</MenuText>
-                            </MenuItem>
-                        </MenuLink>
-                        <MenuLink href="/customer/manage/addresses">
-                            <MenuItem>
-                                <MapPin size="2rem" />
-                                <MenuText>Manage Addresses</MenuText>
-                            </MenuItem>
-                        </MenuLink>
-                        <MenuDivider />
-                        <MenuButton onClick={handleLogout}>
-                            <MenuItem>
-                                <LogOut size="2rem" />
-                                <MenuText>Logout</MenuText>
-                            </MenuItem>
-                        </MenuButton>
-                    </>
-                ) : (
-                    <>
-                        <MenuLink href="/customer/sign-in">
-                            <MenuItem>
-                                <LogIn size="2rem" />
-                                <MenuText>Sign in</MenuText>
-                            </MenuItem>
-                        </MenuLink>
-                        <MenuLink href="/customer/sign-up">
-                            <MenuItem>
-                                <UserPlus size="2rem" />
-                                <MenuText>Sign up</MenuText>
-                            </MenuItem>
-                        </MenuLink>
-                    </>
-                )}
+                <div className="bg-white rounded-lg shadow-xl p-2 min-w-[200px] border border-gray-100">
+                    {isLogged ? (
+                        <>
+                            <Link href="/customer/manage" className="block w-full">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-gray-800">
+                                    <UserCircle size="1.2rem" className="text-awadh-maroon" />
+                                    <span className="font-medium text-sm">My Account</span>
+                                </div>
+                            </Link>
+                            <Link href="/customer/manage/orders" className="block w-full">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-gray-800">
+                                    <Package size="1.2rem" className="text-awadh-maroon" />
+                                    <span className="font-medium text-sm">My Orders</span>
+                                </div>
+                            </Link>
+                            <Link href="/customer/manage/addresses" className="block w-full">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-gray-800">
+                                    <MapPin size="1.2rem" className="text-awadh-maroon" />
+                                    <span className="font-medium text-sm">Manage Addresses</span>
+                                </div>
+                            </Link>
+                            <div className="h-px bg-gray-100 my-1"></div>
+                            <button onClick={handleLogout} className="w-full text-left">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-red-600">
+                                    <LogOut size="1.2rem" />
+                                    <span className="font-medium text-sm">Logout</span>
+                                </div>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/customer/sign-in" className="block w-full">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-gray-800">
+                                    <LogIn size="1.2rem" className="text-awadh-maroon" />
+                                    <span className="font-medium text-sm">Sign in</span>
+                                </div>
+                            </Link>
+                            <Link href="/customer/sign-up" className="block w-full">
+                                <div className="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-md transition-colors text-gray-800">
+                                    <UserPlus size="1.2rem" className="text-awadh-maroon" />
+                                    <span className="font-medium text-sm">Sign up</span>
+                                </div>
+                            </Link>
+                        </>
+                    )}
+                </div>
             </HoverMenu>
         </Dropdown>
     );
 };
-
-const IconWrapper = styled(motion.div)`
-    width: 2.4rem;
-    height: 2.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-`;
-
-const IconButton = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: ${p => p.theme.text.main};
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-
-    &:hover {
-        background-color: ${p => p.theme.gray(50)};
-    }
-`;
-
-const MenuLink = styled(Link)`
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    width: 100%;
-`;
-
-const MenuButton = styled.button`
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    width: 100%;
-    text-align: left;
-    color: inherit;
-`;
-
-const MenuItem = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    transition: all 0.2s ease;
-    border-radius: 0.5rem;
-    margin-bottom: 0.5rem;
-
-    &:hover {
-        background-color: ${p => p.theme.gray(100)};
-    }
-
-    svg {
-        flex-shrink: 0;
-        color: ${p => p.theme.text.main};
-    }
-`;
-
-const MenuText = styled.span`
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: ${p => p.theme.text.main};
-    white-space: nowrap;
-`;
-
-const MenuDivider = styled.div`
-    height: 1px;
-    background-color: ${p => p.theme.gray(200)};
-    margin: 0.5rem 0;
-`;

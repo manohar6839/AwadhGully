@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { InferGetStaticPropsType } from 'next';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
-import { Stack, ContentContainer } from '@/src/components/atoms';
+import { Stack } from '@/src/components/atoms';
 import { AwadhHero } from '@/src/components/organisms/AwadhHero';
 import { BrandStory } from '@/src/components/organisms/BrandStory';
 import { SignatureShowcase } from '@/src/components/organisms/SignatureShowcase';

@@ -10,6 +10,7 @@ interface LinkComponentProps extends LinkProps {
     external?: boolean;
     style?: React.CSSProperties;
     ariaLabel?: string;
+    className?: string;
 }
 
 export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
