@@ -15,13 +15,13 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation }) => {
     return (
         <div className="hidden lg:flex items-center gap-12">
             <nav className="flex items-center gap-8">
-                <a href="#story" className="text-awadh-ivory/90 hover:text-awadh-gold text-sm font-bold uppercase tracking-[0.15em] transition-colors">
+                <a href="#story" className="text-awadh-ivory/90 hover:text-awadh-gold text-2xl font-bold uppercase tracking-[0.15em] transition-colors">
                     Our Story
                 </a>
-                <a href="#menu" className="text-awadh-ivory/90 hover:text-awadh-gold text-sm font-bold uppercase tracking-[0.15em] transition-colors">
+                <a href="#menu" className="text-awadh-ivory/90 hover:text-awadh-gold text-2xl font-bold uppercase tracking-[0.15em] transition-colors">
                     Menu
                 </a>
-                <a href="#experience" className="text-awadh-ivory/90 hover:text-awadh-gold text-sm font-bold uppercase tracking-[0.15em] transition-colors">
+                <a href="#experience" className="text-awadh-ivory/90 hover:text-awadh-gold text-2xl font-bold uppercase tracking-[0.15em] transition-colors">
                     Experience
                 </a>
             </nav>

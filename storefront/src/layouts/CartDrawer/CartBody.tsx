@@ -45,7 +45,14 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                             )}
                                         </Stack>
                                         <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />
-                                        <Remove onClick={async () => await removeFromCart(id)}>
+                                        <Remove 
+                                            onClick={async (e) => {
+                                                e.stopPropagation(); // Prevent event bubbling that closes cart
+                                                await removeFromCart(id);
+                                            }}
+                                            onMouseDown={e => e.stopPropagation()}
+                                            onTouchStart={e => e.stopPropagation()}
+                                        >
                                             <Trash2 size={'2rem'} />
                                             <TP weight={600} size="1rem" upperCase>
                                                 {t('remove')}

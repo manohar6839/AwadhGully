@@ -60,20 +60,20 @@ export const Footer: React.FC<{
                     
                     {/* Column 1: Logo + Tagline (Stacked) */}
                     <div className="md:col-span-1">
-                        <div className="flex flex-col items-start gap-4">
+                        <div className="flex flex-col items-center text-center gap-4">
                             <div className="w-24 shrink-0 text-awadh-ivory">
                                 <LogoAexol width={80} />
                             </div>
-                            <p className="text-awadh-ivory/90 text-lg font-serif italic py-1 leading-snug">
+                            <p className="text-awadh-ivory/90 text-2xl font-serif italic py-1 leading-snug">
                                 Royal Awadhi flavors,<br/>curated for the modern connoisseur.
                             </p>
                         </div>
                     </div>
 
                     {/* Column 2: Explore */}
-                    <div>
+                    <div className="text-center">
                         <h4 className="text-awadh-gold text-lg font-bold uppercase tracking-[0.2em] mb-6 font-sans">Explore</h4>
-                        <ul className="space-y-4 text-lg text-awadh-ivory/80 font-light tracking-wide">
+                        <ul className="space-y-4 text-lg text-awadh-ivory/80 font-light tracking-wide flex flex-col items-center">
                             <li><Link href="/story" className="hover:text-awadh-gold transition-colors block py-0.5">Our Story</Link></li>
                             <li><Link href="/menu" className="hover:text-awadh-gold transition-colors block py-0.5">Signature Menu</Link></li>
                             <li><Link href="/locations" className="hover:text-awadh-gold transition-colors block py-0.5">Locations</Link></li>
@@ -82,11 +82,11 @@ export const Footer: React.FC<{
                     </div>
 
                     {/* Column 3: Contact */}
-                    <div>
+                    <div className="text-center">
                         <h4 className="text-awadh-gold text-lg font-bold uppercase tracking-[0.2em] mb-6 font-sans">Contact</h4>
-                        <ul className="space-y-4 text-lg text-awadh-ivory/80 font-light tracking-wide">
+                        <ul className="space-y-4 text-lg text-awadh-ivory/80 font-light tracking-wide flex flex-col items-center">
                             <li className="flex items-center gap-3"><i className="fa-regular fa-envelope text-awadh-gold/70"></i> hello@awadhgully.com</li>
-                            <li className="flex items-center gap-3"><i className="fa-solid fa-phone text-awadh-gold/70"></i> +91 98765 43210</li>
+                            <li className="flex items-center gap-3"><i className="fa-solid fa-phone text-awadh-gold/70"></i> <a href="tel:+919876543210" className="hover:text-awadh-gold transition-colors">+91 98765 43210</a></li>
                             <li className="flex items-start gap-3"><i className="fa-solid fa-location-dot mt-1 text-awadh-gold/70"></i> Greater Kailash I, New Delhi</li>
                         </ul>
                     </div>
@@ -94,14 +94,14 @@ export const Footer: React.FC<{
                     {/* Column 4: Socials */}
                     <div className="flex flex-col">
                         <h4 className="text-awadh-gold text-lg font-bold uppercase tracking-[0.2em] mb-6 font-sans text-center md:text-center w-full">Follow Us</h4>
-                        <div className="transform origin-right scale-90 flex justify-end">
+                        <div className="transform origin-center scale-100 flex justify-center">
                              <Socials />
                         </div>
                     </div>
                 </div>
 
                 {/* --- Bottom Bar: Copyright & Credit --- */}
-                <div className="border-t border-awadh-ivory/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-awadh-ivory/60 gap-4">
+                <div className="border-t border-awadh-ivory/10 pt-8 flex flex-col md:flex-row justify-between items-center text-2xl text-awadh-ivory/60 gap-4">
                     <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6">
                         <p>&copy; {new Date().getFullYear()} <strong className="font-semibold text-awadh-ivory/80">Awadh Gully Foods Pvt. Ltd.</strong> All rights reserved.</p>
                         <div className="flex gap-4">
@@ -111,12 +111,12 @@ export const Footer: React.FC<{
                     </div>
 
                     {/* Made with Love Credit */}
-                    <div className="flex items-center gap-2 text-sm hover:text-awadh-gold transition-colors group cursor-pointer justify-end">
+                    <div className="flex items-center gap-2 text-2xl hover:text-awadh-gold transition-colors group cursor-pointer justify-end">
                         <span>Made with</span>
                         <span className="text-red-500 animate-pulse">❤️</span>
                         <span>by</span>
                         <a href="https://github.com/manohar6839" target="_blank" rel="noopener noreferrer" className="flex items-center group-hover:underline">
-                            <Github size={14} />
+                            <Github size={24} />
                         </a>
                     </div>
                 </div>

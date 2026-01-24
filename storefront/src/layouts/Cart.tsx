@@ -17,14 +17,8 @@ import { DiscountForm } from '@/src/components/molecules/DiscountForm';
 import { CurrencyCode } from '@/src/zeus';
 
 export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
-    const { setItemQuantityInCart, removeFromCart, removeCouponCode, applyCouponCode } = useCart();
+    const { setItemQuantityInCart, removeFromCart, removeCouponCode, applyCouponCode, isOpen, open, close } = useCart();
     const { t } = useTranslation('common');
-    const [isOpen, setOpen] = useState(false);
-
-    // helper function to close the menu
-    const close = () => {
-        setOpen(false);
-    };
     // Again, we're using framer-motion for the transition effect
 
     const currencyCode = activeOrder?.currencyCode || CurrencyCode.USD;
@@ -35,7 +29,7 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
 
     return (
         <>
-            <IconButton onClick={() => setOpen(!isOpen)}>
+            <IconButton onClick={open}>
                 <ShoppingCartIcon />
                 <span>{activeOrder?.totalQuantity}</span>
             </IconButton>
@@ -98,7 +92,14 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
                                                                 v={quantity}
                                                                 onChange={v => setItemQuantityInCart(id, v)}
                                                             />
-                                                            <Remove onClick={async () => await removeFromCart(id)}>
+                                                            <Remove 
+                                                                onClick={async (e) => {
+                                                                    e.stopPropagation();
+                                                                    await removeFromCart(id);
+                                                                }}
+                                                                onMouseDown={e => e.stopPropagation()}
+                                                                onTouchStart={e => e.stopPropagation()}
+                                                            >
                                                                 <Trash2 size={20} />
                                                                 <TP weight={600} size="1.25rem" upperCase>
                                                                     {t('remove')}

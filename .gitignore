@@ -37,3 +37,13 @@ vendure/packages/dev-server/custom-admin-ui/
 # Custom Backups (we will white-list the ones we want if needed, but usually we don't want them in git)
 backups/
 *.log
+
+# Build Artifacts
+**/deployment-package/
+deployment-package/
+
+# Agent Folders
+.agents/
+.claude/
+.cursor/
+.gemini/

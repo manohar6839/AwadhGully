@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
 import { CustomHelmet } from '@/src/components';
 import { Navigation } from '@/src/layouts/Navigation';
@@ -32,6 +33,10 @@ const MainStack = styled.main`
     width: 100%;
     background: ${p => p.theme.background.main};
 `;
+
+const Agentation = dynamic(() => import('agentation').then(mod => mod.Agentation), {
+    ssr: false,
+});
 
 export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories, navigation }) => {
     const { fetchActiveOrder } = useCart();
@@ -81,6 +86,7 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
                 {children}
             </Stack>
             <Footer navigation={navigation} />
+            {process.env.NODE_ENV === 'development' && <Agentation />}
         </MainStack>
     );
 };

@@ -28,7 +28,8 @@ RUN npm run build
 # CRITICAL: Prepare standalone package with static files
 # Next.js standalone output doesn't include static files by default
 RUN cp -r .next/static .next/standalone/.next/static && \
-    cp -r public .next/standalone/public
+    mkdir -p .next/standalone/public && \
+    cp -r public/* .next/standalone/public/
 
 # Production stage - minimal output for artifact extraction and running
 FROM node:18-alpine AS runner

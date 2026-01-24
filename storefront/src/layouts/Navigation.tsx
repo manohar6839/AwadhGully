@@ -79,7 +79,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             {/* Mobile Toggle & Cart (Mobile) */}
                             <div className="md:hidden flex items-center gap-4">
                                 <CartDrawer activeOrder={cart} />
-                                <button onClick={toggleMenu} className="text-awadh-ivory text-2xl focus:outline-none">
+                                <button onClick={toggleMenu} className="text-awadh-ivory text-5xl focus:outline-none">
                                     <i className={`fa-solid ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
                                 </button>
                             </div>
@@ -90,9 +90,9 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
 
             {/* Mobile Menu Overlay */}
             <div className={`fixed inset-0 bg-awadh-maroon z-40 transform transition-transform duration-300 flex flex-col items-center justify-center gap-8 md:hidden ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                <a href="#story" className="text-awadh-ivory text-2xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>OUR STORY</a>
-                <a href="#menu" className="text-awadh-ivory text-2xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>MENU</a>
-                <a href="#experience" className="text-awadh-ivory text-2xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>EXPERIENCE</a>
+                <a href="#story" className="text-awadh-ivory text-4xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>OUR STORY</a>
+                <a href="#menu" className="text-awadh-ivory text-4xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>MENU</a>
+                <a href="#experience" className="text-awadh-ivory text-4xl font-serif tracking-wide hover:text-awadh-gold transition-colors" onClick={toggleMenu}>EXPERIENCE</a>
                 
                 <div className="mt-8 border-t border-awadh-ivory/20 pt-8 w-48 flex justify-center">
                     <UserMenu isLogged={isLogged} />

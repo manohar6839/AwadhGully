@@ -26,6 +26,8 @@
     "@vendure/core": "3.5.2",
     "@vendure/elasticsearch-plugin": "3.5.2",
     "@vendure/email-plugin": "3.5.2",
+    "better-sqlite3": "^12.6.2",
+    "pg": "^8.17.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

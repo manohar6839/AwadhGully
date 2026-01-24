@@ -19,11 +19,11 @@ export const AwadhHero: React.FC = () => {
 
             {/* Content */}
             <div className="relative z-20 container mx-auto px-8">
-                <h1 className="font-serif text-5xl md:text-7xl font-bold text-awadh-ivory mb-6 leading-tight max-w-4xl">
+                <h1 className="font-serif text-6xl md:text-8xl font-bold text-awadh-ivory mb-6 leading-tight max-w-4xl">
                     Royal Awadhi Flavors,<br />
                     Modernly Served.
                 </h1>
-                <p className="font-sans text-lg text-awadh-ivory/90 mb-12 max-w-xl tracking-wide">
+                <p className="font-sans text-xl md:text-2xl text-awadh-ivory/90 mb-12 max-w-xl tracking-wide">
                     A culinary journey back to the royal kitchens of the Nawabs, reimagined for the pace of the modern urban gourmand.
                 </p>
                 <div className="flex gap-6">
@@ -37,7 +37,7 @@ export const AwadhHero: React.FC = () => {
             </div>
             
             {/* Scroll Indicator (Added from Royal Design) */}
-            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-awadh-ivory animate-bounce text-opacity-70 z-20">
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-awadh-ivory animate-bounce text-opacity-70 z-20 flex flex-col items-center">
                 <span className="text-xs tracking-widest uppercase mb-2 block text-center">Scroll</span>
                 <i className="fa-solid fa-chevron-down text-xl"></i>
             </div>

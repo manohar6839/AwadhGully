@@ -4,15 +4,39 @@ import styled from '@emotion/styled';
 import { Minus, Plus } from 'lucide-react';
 
 export const QuantityCounter = ({ onChange, v }: { onChange: (v: number) => void; v: number }) => {
+    const handleDecrease = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent event bubbling that closes cart
+        // Prevent quantity from going below 1
+        if (v > 1) {
+            onChange(v - 1);
+        }
+    };
+
+    const handleIncrease = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent event bubbling that closes cart
+        onChange(v + 1);
+    };
+
     return (
         <Main itemsCenter>
-            <IconButtonStatic onClick={() => onChange(v - 1)}>
+            <IconButtonStatic 
+                onClick={handleDecrease}
+                onMouseDown={e => e.stopPropagation()}
+                onTouchStart={e => e.stopPropagation()}
+                disabled={v <= 1}
+                aria-label="Decrease quantity"
+            >
                 <MinWidth>
                     <Minus size={'2.5rem'} />
                 </MinWidth>
             </IconButtonStatic>
             <span>{v}</span>
-            <IconButtonStatic onClick={() => onChange(v + 1)}>
+            <IconButtonStatic 
+                onClick={handleIncrease}
+                onMouseDown={e => e.stopPropagation()}
+                onTouchStart={e => e.stopPropagation()}
+                aria-label="Increase quantity"
+            >
                 <MinWidth>
                     <Plus size={'2.5rem'} />
                 </MinWidth>
@@ -29,6 +53,12 @@ const MinWidth = styled.div`
 
 const IconButtonStatic = styled(IconButton)`
     padding: 1.75rem;
+    
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
 `;
 
 const Main = styled(Stack)`

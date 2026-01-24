@@ -92,6 +92,13 @@ const useCartContainer = createContainer(() => {
     };
 
     const setItemQuantityInCart = async (id: string, q: number) => {
+        // Prevent quantity from going below 1
+        // Items should only be removed via removeFromCart function
+        if (q < 1) {
+            console.warn('Cannot set quantity below 1. Use removeFromCart to delete items.');
+            return;
+        }
+
         setActiveOrder(c => {
             if (c?.lines.find(l => l.id === id)) {
                 return { ...c, lines: c.lines.map(l => (l.id === id ? { ...l, q } : l)) };
