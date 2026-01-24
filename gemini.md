@@ -514,3 +514,136 @@ This script handles the entire process:
     *   **Issue:** An SQL update (`UPDATE authentication_method ... WHERE type = 'native'`) failed (`UPDATE 0`) despite the logic being correct.
     *   **Cause:** The database stored the full string `'NativeAuthenticationMethod'`, not the simple key `'native'`.
     *   **Lesson:** Never assume database values based on code constants. Always `SELECT` first to see the raw data format.
+
+### 10. Docker Deployment Public Assets & Build Cache Issues (Jan 24, 2026)
+
+**Goal:** Fix recurring deployment issues where cart functionality breaks and images disappear after deployment.
+
+**Critical Learnings:**
+
+1.  **Public Directory Nesting Issue (The Image Killer):**
+    *   **Issue:** After deployment, logo and hero background images were missing (404 errors).
+    *   **Root Cause:** The Dockerfile.build was copying the entire `public/` directory INTO `.next/standalone/public/`, creating a nested structure: `/public/public/logo.png` instead of `/public/logo.png`.
+    *   **Symptom:** Images referenced as `/logo.png` in code couldn't be found because they were actually at `/public/logo.png` on the server.
+    *   **Fix:** Modified `Dockerfile.build` line 31 from:
+        ```dockerfile
+        cp -r public .next/standalone/public
+        ```
+        To:
+        ```dockerfile
+        mkdir -p .next/standalone/public && \
+        cp -r public/* .next/standalone/public/
+        ```
+    *   **Verification:** After deployment, `ls /var/www/awadhgully/storefront/public/` should show `logo.png`, `hero-background.png`, `locales/`, `images/` directly (NOT a nested `public/` subdirectory).
+    *   **Lesson:** When copying directories in Docker, use `source/*` to copy contents, not `source` to copy the directory itself, unless you explicitly want nesting.
+
+2.  **Build Cache Causing Stale Code Deployment:**
+    *   **Issue:** Code changes (like cart button fixes) were made locally but didn't appear in production after deployment.
+    *   **Root Cause:** Docker and Next.js build caches can persist old compiled code even when source files change.
+    *   **Symptom:** TypeScript source files (`src/`) exist on server but changes aren't reflected in the running application (which uses compiled `.next/` directory).
+    *   **Fix:** Always force a clean build before deployment:
+        ```bash
+        cd storefront
+        rm -rf .next
+        rm -rf deployment-package
+        docker system prune -f
+        ./docker-deploy.sh
+        ```
+    *   **Lesson:** For critical bug fixes or UI changes, ALWAYS clear build artifacts before deploying to ensure fresh compilation.
+
+3.  **Deployment Verification Checklist:**
+    *   After every deployment, verify these critical items:
+        ```bash
+        # 1. Check public directory structure (no nesting)
+        ssh root@143.110.191.214 'ls -la /var/www/awadhgully/storefront/public/'
+        
+        # 2. Verify images are accessible
+        curl -I https://awadhgully.com/logo.png
+        curl -I https://awadhgully.com/hero-background.png
+        
+        # 3. Check PM2 process health
+        ssh root@143.110.191.214 'pm2 list'
+        
+        # 4. Review recent logs for errors
+        ssh root@143.110.191.214 'pm2 logs vendure-storefront --lines 50'
+        ```
+    *   **Lesson:** Automated health checks should include asset accessibility, not just HTTP 200 status.
+
+4.  **Dockerfile Best Practices for Next.js Standalone:**
+    *   **Critical Files to Copy:**
+        1. `.next/static` → `.next/standalone/.next/static` (compiled assets)
+        2. `public/*` → `.next/standalone/public/` (static files - CONTENTS only)
+        3. Standalone already includes: `server.js`, `node_modules`, `.next/server`
+    *   **Common Mistakes:**
+        - Copying `public` directory instead of `public/*` (creates nesting)
+        - Forgetting to copy `.next/static` (breaks client-side JS)
+        - Not setting proper environment variables at build time
+    *   **Lesson:** The standalone output is minimal by design. You MUST manually copy static assets.
+
+5.  **Cart Button Fix Implementation:**
+    *   **Issue:** Cart +/- buttons not working after deployment.
+    *   **Root Cause:** Changes were in source files but not compiled into production build due to cache.
+    *   **Permanent Fix:**
+        1. Modified `QuantityCounter.tsx` to prevent quantity < 1
+        2. Added validation in `cart.ts` state management
+        3. Cleared all caches before rebuild
+        4. Verified changes in deployed `.next` directory
+    *   **Lesson:** UI component changes require full rebuild + cache clear to take effect in production.
+
+**Updated Deployment Workflow (Mandatory for All Future Deployments):**
+
+```bash
+# 1. Navigate to storefront
+cd /Users/manohar_air/Desktop/Coding/AwadhGully/storefront
+
+# 2. CRITICAL: Clear all caches
+rm -rf .next
+rm -rf deployment-package
+docker system prune -f
+
+# 3. Deploy with clean build
+cd ..
+./docker-deploy.sh
+
+# 4. Verify deployment
+ssh root@143.110.191.214 'ls -la /var/www/awadhgully/storefront/public/' | grep -E "logo.png|hero-background.png"
+curl -I https://awadhgully.com/logo.png
+curl -I https://awadhgully.com/hero-background.png
+```
+
+**Files Modified:**
+- `storefront/Dockerfile.build` (public directory copy fix)
+- `storefront/src/components/molecules/QuantityCounter.tsx` (cart button validation)
+- `storefront/src/state/cart.ts` (state management validation)
+
+**Prevention Strategy:**
+- ✅ Always clear caches before deployment
+- ✅ Verify public directory structure after deployment
+- ✅ Test critical user flows (cart, images) immediately after deployment
+- ✅ Document any Dockerfile changes in this file
+- ✅ Never assume cached builds are fresh
+
+### Cart Interaction & Clean Build (Jan 24, 2026)
+
+**Issue:** Cart quantity buttons (+/-) and Remove button were failing to work and causing the cart to close immediately.
+**Root Cause:** A race condition between the global `useOutsideClick` hook (listening on `mousedown`) and the button `onClick` events. The "outside click" logic triggered first, unmounting the component before the action could execute.
+**Solution:**
+1.  Implemented a propagation barrier by adding `e.stopPropagation()` to `onMouseDown` and `onTouchStart` events on all interactive cart elements.
+2.  Applied this fix to `QuantityCounter.tsx` (globally used) and `CartBody.tsx`/`Cart.tsx` (remove buttons).
+
+**Critical Deployment Rule:**
+Always run the following clean build command before deploying to flush stale caches:
+```bash
+cd storefront
+rm -rf .next deployment-package
+docker system prune -f
+../docker-deploy.sh
+```
+
+### Hide Empty Cart Icon (Jan 24, 2026)
+**Feature:** Automatically hide the floating cart icon/button when the cart is empty (count = 0).
+**Implementation:** Conditioned the rendering of the trigger button in `src/layouts/CartDrawer/index.tsx` based on `cartItemCount > 0`.
+**Behavior:**
+- **Empty:** Icon Hidden.
+- **Added:** Icon Appears.
+- **Removed:** Icon Disappears (Drawer stays open until closed).

@@ -36,4 +36,5 @@ description: Core project rules, technology stack, and best practices.
 ## 📝 Best Practices
 1. **Atomic Design**: Build UI components in isolation (`storefront/src/components`).
 2. **Type Safety**: Generate GraphQL types using `npm run codegen`.
-3. **Locale**: Ensure all currency formatting uses `Intl.NumberFormat('en-IN')`.
+4. **Overlay Interactions**: When building overlays (drawers/modals) with `useOutsideClick`, always stop propagation of `mousedown` events on interactive inner elements.
+5. **Deployment Hygiene**: Always clean local build artifacts (`.next`, `deployment-package`) and Docker cache before running production deployment scripts.

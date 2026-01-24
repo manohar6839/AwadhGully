@@ -40,3 +40,12 @@
   cd vendure/packages/dev-server
   npm run dev:server
   ```
+### Cart Buttons (Qty/Remove) Not Working
+- **Issue**: Clicking buttons inside the cart closes the cart immediately.
+- **Cause**: Race condition with `useOutsideClick`. `mousedown` triggers close before `click` fires.
+- **Fix**: Add `e.stopPropagation()` to `onMouseDown` and `onTouchStart` on the button.
+
+### Deployment: Old Code Persists
+- **Issue**: Changes made to code don't appear on production after deployment.
+- **Cause**: Docker and Next.js caching layers holding onto old builds.
+- **Fix**: Always run clean build: `rm -rf .next deployment-package && docker system prune -f`.
